@@ -1,11 +1,11 @@
-'use client'; // This is essential for components with user interaction
+'use client';
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState(''); // Changed from username
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
@@ -16,17 +16,16 @@ export default function LoginForm() {
 
     try {
       const res = await signIn('credentials', {
-        redirect: false, // We handle the redirect manually
-        username,
+        redirect: false,
+        email, // Changed from username
         password,
       });
 
       if (res?.error) {
-        setError('Invalid username or password');
+        setError('Invalid email or password'); // Updated error message
         return;
       }
 
-      // If login is successful, redirect to the admin dashboard
       router.replace('/admin/dashboard');
     } catch (error) {
       console.error(error);
@@ -38,15 +37,15 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="w-full max-w-sm">
       {error && <p className="bg-red-200 text-red-700 p-3 rounded-md mb-4">{error}</p>}
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-          Username
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          Email
         </label>
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          id="email"
+          type="email" // Changed type to email
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
       </div>
