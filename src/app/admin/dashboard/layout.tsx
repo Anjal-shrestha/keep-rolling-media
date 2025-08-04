@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-
+import { Toaster } from 'react-hot-toast';
 export default function DashboardLayout({
   children,
 }: {
@@ -10,6 +10,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex min-h-screen">
+       <Toaster position="bottom-right" />
       <aside className="w-64 bg-gray-800 text-white p-4">
         <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
         <nav>

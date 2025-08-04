@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import connectDB from '@/lib/mongodb';
 import Project from '@/models/Project';
+import DeleteProjectButton from '@/components/DeleteProjectButton'; // 1. Import the new component
 
 export default async function PortfolioAdminPage() {
   await connectDB();
@@ -19,7 +20,8 @@ export default async function PortfolioAdminPage() {
       </div>
 
       <div className="bg-white p-4 rounded-lg shadow-md">
-        {projects.map((project) => (
+        {/* Convert projects to plain objects for client component props */}
+        {JSON.parse(JSON.stringify(projects)).map((project: any) => (
           <div
             key={project._id}
             className="border-b last:border-b-0 py-3 flex justify-between items-center"
@@ -29,12 +31,14 @@ export default async function PortfolioAdminPage() {
               <p className="text-sm text-gray-500">{project.clientName}</p>
             </div>
             <div className="flex gap-2">
-              <button className="text-sm bg-gray-200 px-3 py-1 rounded-md">
-                Edit
-              </button>
-              <button className="text-sm bg-red-500 text-white px-3 py-1 rounded-md">
-                Delete
-              </button>
+             <Link 
+    href={`/admin/dashboard/portfolio/edit/${project._id}`}
+    className="text-sm bg-gray-200 px-3 py-1 rounded-md hover:bg-gray-300"
+  >
+    Edit
+  </Link>
+              {/* 2. Use the new component, passing the project ID */}
+              <DeleteProjectButton projectId={project._id} />
             </div>
           </div>
         ))}
