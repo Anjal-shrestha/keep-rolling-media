@@ -17,7 +17,7 @@ export default async function EditPortfolioProjectPage({ params }: { params: { i
     <div>
       <h1 className="text-3xl font-bold mb-6">Edit Portfolio Project</h1>
       {/* The encType attribute was added here */}
-      <form action={updateActionWithId} encType="multipart/form-data" className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+      <form action={updateActionWithId} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             Project Title

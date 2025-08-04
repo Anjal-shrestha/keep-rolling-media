@@ -1,10 +1,21 @@
+'use client';
+
+import { useFormState } from 'react-dom';
 import { createProjectAction } from '@/app/actions/portfolioActions';
 import SubmitButton from '@/components/SubmitButton';
+
+const initialState = {
+  message: '',
+};
+
 export default function NewPortfolioProjectPage() {
+  const [state, formAction] = useFormState(createProjectAction, initialState);
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Add New Portfolio Project</h1>
-      <form action={createProjectAction} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+      <form action={formAction} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+        {state?.message && <p className="text-red-500">{state.message}</p>}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             Project Title

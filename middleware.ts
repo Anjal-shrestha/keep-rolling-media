@@ -1,7 +1,15 @@
-// This file exports middleware that protects routes
-export { default } from 'next-auth/middleware';
+export { default } from "next-auth/middleware"
 
-// This config specifies which routes to protect
 export const config = {
-  matcher: ['/admin/dashboard/:path*'], // Protect all routes starting with /admin/dashboard
-};
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - admin/login (the login page itself)
+     */
+    '/admin/:path((?!login).*)',
+  ],
+}
