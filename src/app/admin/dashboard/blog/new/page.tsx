@@ -1,10 +1,20 @@
+'use client';
+
+import { useActionState } from 'react';
 import { createBlogPostAction } from '@/app/actions/blogActions';
+import SubmitButton from '@/components/SubmitButton';
+import RichTextEditor from '@/components/RichTextEditor'; // Import the new editor
+
+const initialState = { message: '' };
 
 export default function NewBlogPostPage() {
+  const [state, formAction] = useActionState(createBlogPostAction, initialState);
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Add New Blog Post</h1>
-      <form action={createBlogPostAction} encType="multipart/form-data" className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+      <form action={formAction} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+        {state?.message && <p className="text-red-500">{state.message}</p>}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             Post Title
@@ -14,10 +24,10 @@ export default function NewBlogPostPage() {
             name="title"
             id="title"
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
-         <div>
+        <div>
           <label htmlFor="image" className="block text-sm font-medium text-gray-700">
             Featured Image
           </label>
@@ -31,24 +41,14 @@ export default function NewBlogPostPage() {
           />
         </div>
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
             Content
           </label>
-          <textarea
-            name="content"
-            id="content"
-            rows={10}
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
-          ></textarea>
+          {/* Replace the textarea with the RichTextEditor */}
+          <RichTextEditor name="content" />
         </div>
         <div>
-          <button
-            type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          >
-            Create Post
-          </button>
+          <SubmitButton>Create Post</SubmitButton>
         </div>
       </form>
     </div>

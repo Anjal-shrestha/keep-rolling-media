@@ -4,58 +4,67 @@ export default function AboutPage() {
   return (
     <div className="bg-white">
       {/* Header Section */}
-      <div className="relative h-72 bg-gray-800 flex items-center justify-center">
-        <Image
-          src="/hero-background.jpg" // Replace with a relevant, high-quality image
-          alt="Bus advertising campaign"
-          layout="fill"
-          objectFit="cover"
-          className="opacity-20"
-        />
-        <div className="relative z-10 text-center">
-          <h1 className="text-5xl font-extrabold text-white">About Us</h1>
-          <p className="text-xl text-gray-300 mt-2">The Story Behind the Movement</p>
+      <section className="relative py-20 md:py-28 bg-gray-900 text-white text-center">
+        <div className="absolute inset-0">
+          <Image
+            src="/about_usbg.png" // Make sure you have this image in /public
+            alt="Bus advertising campaign in motion"
+            layout="fill"
+            objectFit="cover"
+            className="opacity-20"
+            priority
+          />
         </div>
-      </div>
+        <div className="container mx-auto px-6 relative z-10 animate-fade-in-down">
+          <h1 className="text-4xl md:text-6xl font-extrabold">Keep Rolling Media Pvt. Ltd.</h1>
+          <p className="mt-4 text-xl md:text-2xl text-gray-300">Where Brands Keep Moving</p>
+        </div>
+      </section>
 
       {/* Main Content Section */}
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Our Mission */}
-          <div className="lg:col-span-2">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Our mission is simple: to provide the most effective and visually stunning mobile advertising solutions in Nepal. We aim to be more than just a vendor; we strive to be a strategic partner in your brand's growth. By placing your message directly in the public eye, we create widespread brand recognition and drive tangible results, ensuring your marketing budget is an investment, not an expense.
-            </p>
-
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-12">Our Values</h2>
-            <div className="space-y-4">
-              <p><strong>Quality First:</strong> From premium, weather-resistant materials to meticulous installation, we never compromise on quality.</p>
-              <p><strong>Client Partnership:</strong> Your success is our success. We work closely with you from concept to completion to ensure your vision comes to life.</p>
-              <p><strong>Innovation:</strong> We stay ahead of industry trends to offer creative solutions that make your brand stand out from the crowd.</p>
-            </div>
+      <section className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Nepal's First Dedicated Vehicle Branding Agency</h2>
+          <p className="text-lg text-gray-600 leading-relaxed">
+            We’re Nepal's first dedicated vehicle branding agency, transforming public transport into powerful mobile billboards. From city buses to auto-rickshaws and even boats, we help your message go further and get seen by thousands every day.
+          </p>
+          <div className="mt-8 text-xl font-medium text-gray-700 border-l-4 border-red-600 pl-6 italic">
+            “We’re not just a media company — we’re creative enablers on wheels.”
           </div>
+        </div>
+      </section>
 
-          {/* Key Stats */}
-          <div className="bg-gray-50 p-8 rounded-lg">
-            <h3 className="text-2xl font-bold mb-6 text-center">By the Numbers</h3>
-            <div className="space-y-6 text-center">
-              <div>
-                <p className="text-4xl font-extrabold text-red-600">9+</p>
-                <p className="text-gray-700 font-medium">Years in Business</p>
+      {/* What Drives Us Section */}
+      <section className="bg-gray-50 py-16">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">What Drives Us</h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Founded in Kathmandu, we started with a simple belief: advertising shouldn’t stand still. We blend creativity, local insight, and bold execution to make sure your brand stays in motion — and top of mind.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-8 text-center">
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <p className="text-4xl font-extrabold text-red-600">70+</p>
+                <p className="mt-2 font-semibold text-gray-700">Campaigns Launched</p>
               </div>
-              <div>
+               <div className="bg-white p-6 rounded-lg shadow-md">
                 <p className="text-4xl font-extrabold text-red-600">500+</p>
-                <p className="text-gray-700 font-medium">Buses Wrapped</p>
+                <p className="mt-2 font-semibold text-gray-700">Vehicles Branded</p>
               </div>
-              <div>
-                <p className="text-4xl font-extrabold text-red-600">100+</p>
-                <p className="text-gray-700 font-medium">Happy Clients</p>
+               <div className="bg-white p-6 rounded-lg shadow-md">
+                <p className="text-4xl font-extrabold text-red-600">15+</p>
+                <p className="mt-2 font-semibold text-gray-700">Cities Covered</p>
+              </div>
+               <div className="bg-white p-6 rounded-lg shadow-md">
+                <p className="text-4xl font-extrabold text-red-600">9+</p>
+                <p className="mt-2 font-semibold text-gray-700">Years of Experience</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

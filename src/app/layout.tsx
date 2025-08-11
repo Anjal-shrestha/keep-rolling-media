@@ -21,8 +21,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <ConditionalLayout>
 
-          
-           {/* Use the Navbar component */}
+       
           <main>{children}</main>
         
           

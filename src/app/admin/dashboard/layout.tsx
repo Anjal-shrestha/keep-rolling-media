@@ -1,4 +1,4 @@
-'use client';
+'use client'; 
 
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
@@ -22,7 +22,7 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Toaster position="bottom-right" />
+      <Toaster position="bottom-right" /> 
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
@@ -38,7 +38,22 @@ export default function DashboardLayout({
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold">Admin Panel</h2>
+        </div>
+        
+        {/* ADD THIS NEW LINK */}
+        <Link 
+          href="/" 
+          target="_blank" 
+          className="group flex items-center w-full text-center justify-center mb-6 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+        >
+          View Site
+          <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+        </Link>
+        
         <nav>
           <ul>
             {navLinks.map((link) => (
@@ -56,7 +71,7 @@ export default function DashboardLayout({
         </nav>
         <button
           onClick={() => signOut({ callbackUrl: '/' })}
-          className="mt-8 bg-red-600 w-full text-white px-4 py-2 rounded-md hover:bg-red-700"
+          className="absolute bottom-4 left-4 right-4 bg-red-600 w-auto text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           Sign Out
         </button>
@@ -65,7 +80,7 @@ export default function DashboardLayout({
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Mobile Header */}
-        <header className="md:hidden bg-white shadow-md pt p-4 flex justify-between items-center">
+        <header className="md:hidden bg-white shadow-md p-4 flex justify-between items-center">
           <span className="text-xl font-bold">Admin</span>
           <button onClick={() => setSidebarOpen(true)} className="text-gray-800">
             <svg

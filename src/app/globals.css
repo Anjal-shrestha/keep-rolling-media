@@ -26,26 +26,12 @@ html {
   }
 }
 
-/* Animation for the road lines */
-@keyframes move-right {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-}
-
 .animate-fade-in-down {
   animation: fade-in-down 0.8s ease-out forwards;
-  opacity: 0; /* Start hidden */
+  opacity: 0;
 }
 
 .animate-fade-in-up {
   animation: fade-in-up 0.8s ease-out forwards;
-  opacity: 0; /* Start hidden */
-}
-
-.animate-road-line {
-  animation: move-right 20s linear infinite;
+  opacity: 0;
 }

@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
+import Footer from './Footer'; // 1. Import the new Footer component
 
 export default function ConditionalLayout({
   children,
@@ -14,14 +15,11 @@ export default function ConditionalLayout({
   return (
     <>
       {!isAdminPage && <Navbar />}
-      {children}
-      {!isAdminPage && (
-        <footer className="bg-gray-800 text-white mt-12">
-          <div className="container mx-auto px-6 py-4 text-center">
-            © {new Date().getFullYear()} Keep Rolling Media Pvt. Ltd. All Rights Reserved.
-          </div>
-        </footer>
-      )}
+
+      <main>{children}</main> {/* It's better to keep <main> here */}
+
+      {/* 2. Conditionally render the new Footer component */}
+      {!isAdminPage && <Footer />}
     </>
   );
 }

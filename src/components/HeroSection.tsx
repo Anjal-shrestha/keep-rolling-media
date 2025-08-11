@@ -1,21 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function HeroSection() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Trigger animations after mount
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
   return (
     <section
       className="relative bg-gradient-to-br from-white via-red-50 to-white overflow-hidden"
       aria-labelledby="hero-title"
     >
-      {/* Optional subtle background pattern */}
+      {/* Subtle background dot pattern */}
       <div
         className="absolute inset-0 opacity-10"
         style={{
@@ -23,76 +16,56 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Floating decoration (optional) */}
-      <div className="absolute top-1/4 right-10 w-24 h-24 bg-red-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-      <div className="absolute bottom-1/4 left-10 w-32 h-32 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-25 animate-pulse delay-1000"></div>
+      <div className="relative z-10 container mx-auto px-6 pt-10 pb-20 md:pt-12 md:pb-24">
 
-      <div className="container mx-auto px-6 py-24 md:py-32 relative z-10">
-        <div
-          className={`text-center transform transition-all duration-1000 ${
-            isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-          }`}
-        >
-          {/* Main Title with Split Animation */}
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Main Heading */}
           <h1
             id="hero-title"
-            className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6"
+            className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6 animate-fade-in-down"
           >
-            <span className="block">
-              We Don't Just Wrap Buses.
+            <span className="block text-gray-900">
+              Think Outside the Bus!
             </span>
-            <span className="bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
-              We Mobilize Brands.
+            <span className="block bg-gradient-to-r from-red-600 to-gray-800 bg-clip-text text-transparent mt-3">
+              Nepal’s Premier Vehicle Branding Experts
             </span>
           </h1>
 
-          {/* Tagline */}
+          {/* Subheadline */}
           <p
-            className="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-gray-600 leading-relaxed animate-fade-in-up"
-            style={{ animationDelay: '0.5s' }}
+            className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-gray-600 leading-relaxed animate-fade-in-down"
+            style={{ animationDelay: '0.3s' }}
           >
-            Taking brands on the move for over 9 years. High-impact, mobile advertising that captures attention and delivers real results — wherever the road leads.
+            Make your brand move, stand out, and stay remembered — on wheels, on streets, and in minds.
           </p>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <div
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-in-up"
-            style={{ animationDelay: '0.8s' }}
+            className="mt-10 animate-fade-in-up"
+            style={{ animationDelay: '0.6s' }}
           >
-            <a
-              href="/contact"
-              className="group bg-red-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition-all duration-300 hover:scale-105 hover:shadow-xl transform focus:outline-none focus:ring-offset-2"
-            >
-              Get a Free Quote
-              <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">
-                →
-              </span>
-            </a>
-
-            <a
-              href="/portfolio"
-              className="px-8 py-4 rounded-full text-lg font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 transition-all duration-300 hover:shadow-md"
-            >
-              View Our Work
-            </a>
+             <Link
+            href="/contact"
+            className="bg-gray-900 text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-transparent hover:bg-white hover:text-gray-900 hover:border-gray-900 transition-all duration-300 transform hover:scale-105"
+          >
+            🚌 Start Your Campaign
+          </Link>
           </div>
 
-          {/* Trust Badge or Stats */}
-          <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm md:text-base text-gray-500">
+          {/* Stats / Social Proof */}
+          <div
+            className="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-4 text-gray-600 text-base animate-fade-in-up"
+            style={{ animationDelay: '0.8s' }}
+          >
+            <span className="font-medium">✅ 70+ Successful Campaigns</span>
             <span className="flex items-center">
-              🚍 <span className="ml-1"><strong>500+</strong> Buses Wrapped</span>
+              🚍 <span className="ml-1"><strong>500+</strong> Vehicles  Branded</span>
             </span>
-            <span className="flex items-center">
-              🌆 <span className="ml-1"><strong>15+</strong> Cities Covered</span>
-            </span>
-            <span className="flex items-center">
-              ⭐ <span className="ml-1"><strong>9-Year</strong> Track Record</span>
-            </span>
+            <span className="font-medium">💼 Trusted by top brands & startups</span>
           </div>
         </div>
       </div>
-
-     
     </section>
   );
 }
