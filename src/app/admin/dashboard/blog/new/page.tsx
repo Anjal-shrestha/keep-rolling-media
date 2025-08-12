@@ -1,136 +1,69 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useActionState } from 'react';
+import { createBlogPostAction } from '@/app/actions/blogActions';
+import SubmitButton from '@/components/SubmitButton';
+
+const initialState = { message: '', error: '' };
 
 export default function NewBlogPostPage() {
-  const router = useRouter();
-
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    metaTitle: '',
-    metaDescription: '',
-    content: '',
-  });
-  const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
-
-    try {
-      const res = await fetch('/api/admin/blog', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) throw new Error('Failed to create post');
-      router.push('/admin/dashboard/blog');
-    } catch (err: any) {
-      setError(err.message || 'Unknown error');
-    } finally {
-      setSubmitting(false);
-    }
-  }
+  const [state, formAction] = useActionState(createBlogPostAction, initialState);
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-8 text-red-700">Add New Blog Post</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {error && <p className="text-red-600">{error}</p>}
-
-        <div>
-          <label htmlFor="title" className="block mb-1 font-semibold">
-            Title <span className="text-red-600">*</span>
-          </label>
-          <input
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            type="text"
-            required
-            maxLength={120}
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
+    <div>
+      <h1 className="text-3xl font-bold mb-6">Add New Blog Post</h1>
+      <form action={formAction} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+        {state?.error && <p className="bg-red-100 text-red-700 p-3 rounded-md">{state.error}</p>}
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-6">
+                {/* Main Content */}
+                <div>
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+                    <input type="text" name="title" id="title" required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+                </div>
+                <div>
+                    <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content (Markdown supported)</label>
+                    <textarea name="content" id="content" rows={15} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm font-mono"></textarea>
+                </div>
+                 <div>
+                    <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700">Excerpt (Short summary)</label>
+                    <textarea name="excerpt" id="excerpt" rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                </div>
+            </div>
+            <div className="space-y-6 bg-gray-50 p-6 rounded-lg border">
+                 <div>
+                    <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-700">Featured Image</label>
+                    <input type="file" name="featuredImage" id="featuredImage" required accept="image/*" className="mt-1 block w-full text-sm" />
+                </div>
+                <div>
+                    <label htmlFor="metaTitle" className="block text-sm font-medium text-gray-700">Meta Title</label>
+                    <input type="text" name="metaTitle" id="metaTitle" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+                </div>
+                <div>
+                    <label htmlFor="metaDescription" className="block text-sm font-medium text-gray-700">Meta Description</label>
+                    <textarea name="metaDescription" id="metaDescription" rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                </div>
+                <div>
+                    <label htmlFor="tags" className="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
+                    <input type="text" name="tags" id="tags" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+                </div>
+                 <div>
+                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                    <input type="text" name="category" id="category" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+                </div>
+                 <div>
+                    <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
+                    <select name="status" id="status" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+            </div>
         </div>
-
-        <div>
-          <label htmlFor="slug" className="block mb-1 font-semibold">
-            Slug (URL-friendly) <span className="text-red-600">*</span>
-          </label>
-          <input
-            id="slug"
-            name="slug"
-            value={formData.slug}
-            onChange={handleChange}
-            type="text"
-            required
-            maxLength={100}
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
+        <div className="pt-6">
+            <SubmitButton>Create Post</SubmitButton>
         </div>
-
-        <div>
-          <label htmlFor="metaTitle" className="block mb-1 font-semibold">
-            Meta Title (optional)
-          </label>
-          <input
-            id="metaTitle"
-            name="metaTitle"
-            value={formData.metaTitle}
-            onChange={handleChange}
-            type="text"
-            maxLength={160}
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="metaDescription" className="block mb-1 font-semibold">
-            Meta Description (optional)
-          </label>
-          <textarea
-            id="metaDescription"
-            name="metaDescription"
-            value={formData.metaDescription}
-            onChange={handleChange}
-            rows={3}
-            maxLength={300}
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="content" className="block mb-1 font-semibold">
-            Content <span className="text-red-600">*</span>
-          </label>
-          <textarea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            rows={10}
-            required
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 font-mono"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition disabled:opacity-50"
-        >
-          {submitting ? 'Creating...' : 'Create Post'}
-        </button>
       </form>
     </div>
   );

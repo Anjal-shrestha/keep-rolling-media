@@ -1,7 +1,7 @@
 import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 import Link from 'next/link';
-
+import Image from 'next/image';
 export default async function BlogPage() {
   await connectDB();
   const posts = await BlogPost.find({}).sort({ publishedAt: -1 }).lean();
@@ -18,11 +18,14 @@ export default async function BlogPage() {
           >
             {post.featuredImageUrl && (
               <Link href={`/blog/${post.slug}`}>
-                <img
-                  src={post.featuredImageUrl}
-                  alt={post.title}
-                  className="w-full h-52 object-cover cursor-pointer"
-                />
+                <Image
+        src={post.featuredImageUrl}
+        alt={post.title}
+        width={600} // or any appropriate width
+        height={320} // or appropriate height matching aspect ratio
+        className="cursor-pointer object-cover rounded-t-xl"
+        priority={false} // optional: for lazy loading
+      />
               </Link>
             )}
             <div className="p-6">
