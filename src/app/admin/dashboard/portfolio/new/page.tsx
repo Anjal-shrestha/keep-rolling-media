@@ -67,7 +67,7 @@ export default function NewPortfolioProjectPage() {
         </div>
         <div>
           <label htmlFor="vehiclesBranded" className="block text-sm font-medium text-gray-700">
-            Vehicles Branded (e.g., "200 Taxis")
+            Vehicles Branded (e.g., &quot;200 Taxis&quot;)
           </label>
           <input
             type="text"

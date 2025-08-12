@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useCallback} from 'react';
 
 type TestimonialType = {
   _id: string;
@@ -20,18 +20,18 @@ const QuoteIcon = () => (
 export default function TestimonialCarousel({ testimonials }: { testimonials: TestimonialType[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleNext = () => {
+ const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
   };
 
-  useEffect(() => {
-    const slideInterval = setInterval(handleNext, 5000); // Auto-play every 5 seconds
+ useEffect(() => {
+    const slideInterval = setInterval(handleNext, 5000);
     return () => clearInterval(slideInterval);
-  }, []);
+  }, [handleNext]); // 
 
 
   return (
