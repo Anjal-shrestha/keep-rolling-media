@@ -1,47 +1,63 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import connectDB from '@/lib/mongodb';
-import BlogPost from '@/models/BlogPost';
-import DeleteBlogPostButton from '@/components/DeleteBlogPostButton'; // Import the new component
 
-export default async function BlogAdminPage() {
-  await connectDB();
-  const posts = await BlogPost.find({}).sort({ createdAt: -1 });
+interface BlogPost {
+  _id: string;
+  title: string;
+  slug: string;
+}
 
-type PostType = { _id: string; title: string; };
+export default function AdminBlogListPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    fetch('/api/admin/blog') // We'll create this API route below
+      .then(res => res.json())
+      .then(data => setPosts(data.posts))
+      .catch(console.error);
+  }, []);
+
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Manage Blog</h1>
-        <Link
-          href="/admin/dashboard/blog/new"
-          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-        >
-          + Add New Post
-        </Link>
-      </div>
-
-      <div className="bg-white p-4 rounded-lg shadow-md">
-       {JSON.parse(JSON.stringify(posts)).map((post: PostType) => (
-          <div
-            key={post._id}
-            className="border-b last:border-b-0 py-3 flex justify-between items-center"
-          >
-            <div>
-              <h3 className="font-semibold text-lg">{post.title}</h3>
-            </div>
-            <div className="flex gap-2">
-               <Link
-                href={`/admin/dashboard/blog/edit/${post._id}`}
-                className="text-sm bg-gray-200 px-3 py-1 rounded-md hover:bg-gray-300"
-              >
-                Edit
-              </Link>
-              {/* Use the new delete button component */}
-              <DeleteBlogPostButton postId={post._id} />
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Manage Blogs</h1>
+      <Link href="/admin/dashboard/blog/new" className="text-blue-600 hover:underline mb-4 inline-block">
+        + Add New Post
+      </Link>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <th className="border p-2 text-left">Title</th>
+            <th className="border p-2 text-left">Slug</th>
+            <th className="border p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {posts.map(post => (
+            <tr key={post._id}>
+              <td className="border p-2">{post.title}</td>
+              <td className="border p-2">{post.slug}</td>
+              <td className="border p-2 space-x-2">
+                <Link href={`/admin/dashboard/blog/edit/${post._id}`} className="text-blue-600 hover:underline">
+                  Edit
+                </Link>
+                <button
+                  className="text-red-600 hover:underline"
+                  onClick={async () => {
+                    if (confirm('Are you sure you want to delete this post?')) {
+                      await fetch(`/api/admin/blog/${post._id}`, { method: 'DELETE' });
+                      setPosts(posts.filter(p => p._id !== post._id));
+                    }
+                  }}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

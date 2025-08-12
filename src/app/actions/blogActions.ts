@@ -4,130 +4,131 @@ import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 
-// Configure Cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
-interface FormState {
-  message: string;
-  error?: string;
+function generateSlug(title: string) {
+  return title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 }
-type CloudinaryUploadResult = UploadApiResponse | undefined;
 
-// --- CREATE BLOG POST ---
-// The signature MUST accept prevState and formData
-export async function createBlogPostAction(prevState: FormState, formData: FormData): Promise<FormState> {
-  const title = formData.get('title') as string;
-  const content = formData.get('content') as string;
-  const imageFile = formData.get('image') as File;
+type CloudinaryUploadResult = {
+  secure_url: string;
+};
 
-  if (!imageFile || imageFile.size === 0) {
-    return { message: '', error: 'Featured image is required.' };
+// Create
+export async function createBlogPostAction(formData: FormData) {
+  const title = formData.get('title') as string | null;
+  const metaTitle = formData.get('metaTitle') as string | null;
+  const metaDescription = formData.get('metaDescription') as string | null;
+  const content = formData.get('content') as string | null;
+  const imageFile = formData.get('featuredImage') as File | null;
+
+  if (!title || !content || !imageFile) {
+    return { error: 'Title, content, and image are required.' };
   }
 
-  // Create a URL-friendly slug from the title
-  const slug = title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  const slug = generateSlug(title);
 
-  // Upload image to Cloudinary
   const bytes = await imageFile.arrayBuffer();
   const buffer = Buffer.from(bytes);
+
   const uploadResult = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
-    cloudinary.uploader.upload_stream({ folder: 'keep_rolling_media_blog' }, (error, result) => {
+    cloudinary.uploader.upload_stream({ folder: 'blog' }, (error, result) => {
       if (error) reject(error);
-      resolve(result);
+      else resolve(result as CloudinaryUploadResult);
     }).end(buffer);
   });
-  
-  if (!uploadResult) {
-      return { message: '', error: 'Image upload failed.' };
-  }
 
   await connectDB();
 
-  const newPost = {
-    title,
-    slug,
-    content,
-    featuredImageUrl: uploadResult.secure_url,
-  };
-
   try {
-    await new BlogPost(newPost).save();
-  } catch (error) {
-    console.error('Failed to create blog post:', error);
-    return { message: '', error: 'Failed to create blog post. The slug might already exist.' };
+    await new BlogPost({
+      title,
+      slug,
+      metaTitle: metaTitle || undefined,
+      metaDescription: metaDescription || undefined,
+      featuredImageUrl: uploadResult.secure_url,
+      content,
+      publishedAt: new Date(),
+    }).save();
+  } catch {
+    return { error: 'Error saving blog post. Slug might already exist.' };
   }
 
   revalidatePath('/blog');
-  revalidatePath('/admin/dashboard/blog');
-  redirect('/admin/dashboard/blog');
+  redirect('/blog');
 }
 
-// --- UPDATE BLOG POST ---
-export async function updateBlogPostAction(prevState: FormState, formData: FormData): Promise<FormState> {
-  const postId = formData.get('postId') as string;
-  const title = formData.get('title') as string;
-  const content = formData.get('content') as string;
-  const imageFile = formData.get('image') as File;
+// Update
+export async function updateBlogPostAction(formData: FormData) {
+  const id = formData.get('id') as string | null;
+  const title = formData.get('title') as string | null;
+  const metaTitle = formData.get('metaTitle') as string | null;
+  const metaDescription = formData.get('metaDescription') as string | null;
+  const content = formData.get('content') as string | null;
+  const imageFile = formData.get('featuredImage') as File | null;
 
-  const slug = title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
-  let featuredImageUrl;
+  if (!id || !title || !content) {
+    return { error: 'ID, title and content are required.' };
+  }
+
+  const slug = generateSlug(title);
+
+  await connectDB();
+
+  let featuredImageUrl: string | null = null;
 
   if (imageFile && imageFile.size > 0) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
+
     const uploadResult = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
-      cloudinary.uploader.upload_stream({ folder: 'keep_rolling_media_blog' }, (error, result) => {
+      cloudinary.uploader.upload_stream({ folder: 'blog' }, (error, result) => {
         if (error) reject(error);
-        resolve(result);
+        else resolve(result as CloudinaryUploadResult);
       }).end(buffer);
     });
-    if (uploadResult) {
-      featuredImageUrl = uploadResult.secure_url;
-    }
+
+    featuredImageUrl = uploadResult.secure_url;
   }
-
-  const updatedFields: { title: string; slug: string; content: string; featuredImageUrl?: string } = {
-    title,
-    slug,
-    content,
-  };
-
-  if (featuredImageUrl) {
-    updatedFields.featuredImageUrl = featuredImageUrl;
-  }
-
-  await connectDB();
 
   try {
-    await BlogPost.findByIdAndUpdate(postId, updatedFields);
-  } catch (error) {
-    console.error('Failed to update blog post:', error);
-    return { message: '', error: 'Failed to update blog post.' };
+    const post = await BlogPost.findById(id);
+    if (!post) {
+      return { error: 'Post not found.' };
+    }
+
+    post.title = title;
+    post.slug = slug;
+    post.metaTitle = metaTitle || undefined;
+    post.metaDescription = metaDescription || undefined;
+    post.content = content;
+    if (featuredImageUrl) {
+      post.featuredImageUrl = featuredImageUrl;
+    }
+
+    await post.save();
+  } catch {
+    return { error: 'Failed to update post.' };
   }
 
   revalidatePath('/blog');
-  revalidatePath(`/blog/${slug}`);
-  revalidatePath('/admin/dashboard/blog');
   redirect('/admin/dashboard/blog');
 }
 
-
-// --- DELETE BLOG POST ---
+// Delete
 export async function deleteBlogPostAction(postId: string) {
   await connectDB();
-
   try {
     await BlogPost.findByIdAndDelete(postId);
   } catch (error) {
     console.error('Failed to delete blog post:', error);
   }
-
   revalidatePath('/blog');
   revalidatePath('/admin/dashboard/blog');
 }

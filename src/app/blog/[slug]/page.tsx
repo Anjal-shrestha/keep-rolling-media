@@ -1,47 +1,70 @@
 import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import LocalDate from '@/components/LocalDate';
+import Head from 'next/head';
+import ReactMarkdown from 'react-markdown';
+import Image from 'next/image';
 
-export default async function SingleBlogPostPage({ params }: { params: { slug: string } }) {
+type Params = {
+  params: {
+    slug: string;
+  };
+};
+
+type BlogPostType = {
+  title: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  featuredImageUrl?: string;
+  content: string;
+};
+
+export async function generateStaticParams() {
   await connectDB();
-  const post = await BlogPost.findOne({ slug: params.slug });
+
+  const posts = await BlogPost.find({})
+    .select('slug')
+    .lean();
+
+  const typedPosts = posts as unknown as Array<{ slug: string }>;
+
+  return typedPosts.map(post => ({ slug: post.slug }));
+}
+
+export default async function BlogPostPage({ params }: Params) {
+  await connectDB();
+
+  const post = (await BlogPost.findOne({ slug: params.slug }).lean()) as unknown as BlogPostType | null;
 
   if (!post) {
     notFound();
   }
 
   return (
-    <article className="bg-white py-16">
-      <div className="container mx-auto px-6 max-w-4xl">
-        {/* Post Header */}
-        <header className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-            {post.title}
-          </h1>
-          <p className="mt-4 text-gray-500">
-            Posted on <LocalDate dateString={post.createdAt.toISOString()} options={{ year: 'numeric', month: 'long', day: 'numeric' }} />
-          </p>
-        </header>
+    <>
+      <Head>
+        <title>{post.metaTitle || post.title}</title>
+        <meta name="description" content={post.metaDescription || post.content.slice(0, 150)} />
+        <meta property="og:title" content={post.metaTitle || post.title} />
+        {post.featuredImageUrl && <meta property="og:image" content={post.featuredImageUrl} />}
+      </Head>
 
-        {/* Featured Image */}
-        <div className="relative h-96 w-full mb-12 rounded-lg overflow-hidden shadow-lg">
+      <article className="prose mx-auto py-10 max-w-3xl">
+        <h1>{post.title}</h1>
+        {post.featuredImageUrl && (
           <Image
             src={post.featuredImageUrl}
             alt={post.title}
-            layout="fill"
-            objectFit="cover"
+            width={800}
+            height={450}
+            className="rounded mb-6"
             priority
           />
-        </div>
-
-        {/* Post Content */}
-        <div
-          className="prose prose-lg lg:prose-xl max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-a:text-red-600 prose-strong:text-gray-800"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        ></div>
-      </div>
-    </article>
+        )}
+        <ReactMarkdown>{post.content}</ReactMarkdown>
+      </article>
+    </>
   );
 }
+
+export const revalidate = 60;
