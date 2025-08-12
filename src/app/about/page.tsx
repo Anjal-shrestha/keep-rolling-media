@@ -22,11 +22,11 @@ export default function AboutPage() {
       </section>
 
       {/* Main Content Section */}
-      <section className="container mx-auto px-6 py-16">
+       <section className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Nepal's First Dedicated Vehicle Branding Agency</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Nepal&apos;s First Dedicated Vehicle Branding Agency</h2>
           <p className="text-lg text-gray-600 leading-relaxed">
-            We’re Nepal's first dedicated vehicle branding agency, transforming public transport into powerful mobile billboards. From city buses to auto-rickshaws and even boats, we help your message go further and get seen by thousands every day.
+            We’re Nepal&apos;s first dedicated vehicle branding agency, transforming public transport into powerful mobile billboards. From city buses to auto-rickshaws and even boats, we help your message go further and get seen by thousands every day.
           </p>
           <div className="mt-8 text-xl font-medium text-gray-700 border-l-4 border-red-600 pl-6 italic">
             “We’re not just a media company — we’re creative enablers on wheels.”

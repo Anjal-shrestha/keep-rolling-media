@@ -7,7 +7,7 @@ import DeleteClientButton from '@/components/DeleteClientButton';
 export default async function ClientsAdminPage() {
   await connectDB();
   const clients = await Client.find({}).sort({ createdAt: -1 });
-
+type ClientType = { _id: string; logoUrl: string; name: string; };
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Form Section */}
@@ -55,7 +55,7 @@ export default async function ClientsAdminPage() {
          <h2 className="text-2xl font-bold mb-6">Current Clients</h2>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {JSON.parse(JSON.stringify(clients)).map((client: any) => (
+            {JSON.parse(JSON.stringify(clients)).map((client: ClientType) => (
               <div key={client._id} className="relative p-4 border rounded-md flex flex-col items-center justify-center gap-2">
                  <Image
                     src={client.logoUrl}

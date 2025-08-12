@@ -7,6 +7,7 @@ export default async function BlogAdminPage() {
   await connectDB();
   const posts = await BlogPost.find({}).sort({ createdAt: -1 });
 
+type PostType = { _id: string; title: string; };
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -20,7 +21,7 @@ export default async function BlogAdminPage() {
       </div>
 
       <div className="bg-white p-4 rounded-lg shadow-md">
-        {JSON.parse(JSON.stringify(posts)).map((post: any) => (
+       {JSON.parse(JSON.stringify(posts)).map((post: PostType) => (
           <div
             key={post._id}
             className="border-b last:border-b-0 py-3 flex justify-between items-center"
