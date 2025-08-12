@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// This defines the structure of the project document
 export interface IProject extends Document {
   title: string;
   clientName: string;
@@ -9,9 +8,11 @@ export interface IProject extends Document {
   displayOrder: number;
   vehiclesBranded: string;
   campaignFocus: string;
+  // Add the timestamp fields that Mongoose creates
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// This is the Mongoose schema
 const ProjectSchema: Schema = new Schema(
   {
     title: { type: String, required: true },
@@ -22,8 +23,7 @@ const ProjectSchema: Schema = new Schema(
     vehiclesBranded: { type: String, required: true },
     campaignFocus: { type: String, required: true },
   },
-  { timestamps: true } // Automatically adds createdAt and updatedAt fields
+  { timestamps: true } // This option adds createdAt and updatedAt
 );
 
-// This exports the model, creating it if it doesn't already exist
 export default mongoose.models.Project || mongoose.model<IProject>('Project', ProjectSchema);

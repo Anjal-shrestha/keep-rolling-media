@@ -23,7 +23,7 @@ export default function AboutSection() {
               Keep Rolling Media Pvt. Ltd. – Where Brands Keep Moving
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              We’re Nepal's first dedicated vehicle branding agency, transforming public transport into powerful mobile billboards. We help your message go further and get seen by thousands every day.
+              We’re Nepal&apos;s first dedicated vehicle branding agency, transforming public transport into powerful mobile billboards. We help your message go further and get seen by thousands every day.
             </p>
             <blockquote className="border-l-4 border-red-600 pl-4 italic text-gray-700 font-medium my-6">
               “We’re not just a media company — we’re creative enablers on wheels.”

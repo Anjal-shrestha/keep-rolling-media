@@ -15,6 +15,7 @@ cloudinary.config({
 
 interface FormState {
   message: string;
+  error?: string; // Make the error property optional
 }
 type CloudinaryUploadResult = UploadApiResponse | undefined;
 

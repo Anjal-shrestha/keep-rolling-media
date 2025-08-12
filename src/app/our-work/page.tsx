@@ -1,17 +1,26 @@
-import TestimonialCarousel from '@/components/TestimonialCarousel';
-import TestimonialsSection from '@/components/TestimonialsSection';
 import connectDB from '@/lib/mongodb';
-import Project from '@/models/Project';
+import Project, { IProject } from '@/models/Project';
 import Image from 'next/image';
+import TestimonialsSection from '@/components/TestimonialsSection';
 
 export default async function OurWorkPage() {
   await connectDB();
-  const projects = await Project.find({}).sort({ createdAt: -1 });
+  const projects: IProject[] = await Project.find({}).sort({ createdAt: -1 });
+
+  // **THE FIX:** Create a clean, properly-typed array of projects first.
+  // This is the most reliable way to handle MongoDB data in Server Components.
+  const plainProjects = projects.map(project => {
+    const plainObject = project.toObject();
+    return {
+      ...plainObject,
+      _id: plainObject._id.toString(),
+    };
+  });
 
   return (
-    <div className="bg-white py-2">
+    <div className="bg-white">
       {/* Header Section */}
-      <section className="bg-gray-50 py-5 text-center">
+      <section className="bg-gray-50 py-16 text-center">
         <div className="container mx-auto px-6 animate-fade-in-down">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">Clients & Projects</h1>
           <p className="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
@@ -21,7 +30,7 @@ export default async function OurWorkPage() {
       </section>
 
       {/* Accomplishments Section */}
-      <section className="py-4">
+      <section className="py-16">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="bg-white p-6 rounded-lg shadow-md border">
@@ -41,7 +50,7 @@ export default async function OurWorkPage() {
       </section>
 
       {/* Projects Table Section */}
-      <section className="bg-gray-50 py-8">
+      <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800">Some of Our Projects</h2>
@@ -57,7 +66,8 @@ export default async function OurWorkPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {JSON.parse(JSON.stringify(projects)).map((project: any) => (
+                {/* Now we map over our clean, pre-prepared array */}
+                {plainProjects.map((project) => (
                   <tr key={project._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
