@@ -12,7 +12,7 @@ const services = [
   },
   {
     name: 'Auto Rickshaws',
-    image: '/service-tempo.jpg', // Replace with your actual image path
+    image: '/service-tempo.png', // Replace with your actual image path
   },
   {
     name: 'Boats',

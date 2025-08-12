@@ -35,3 +35,8 @@ html {
   animation: fade-in-up 0.8s ease-out forwards;
   opacity: 0;
 }
+
+
+.animate-slide {
+  animation: slide 15s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+}

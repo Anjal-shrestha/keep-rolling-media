@@ -66,6 +66,30 @@ export default function NewPortfolioProjectPage() {
           />
         </div>
         <div>
+  <label htmlFor="vehiclesBranded" className="block text-sm font-medium text-gray-700">
+    Vehicles Branded (e.g., "200 Taxis")
+  </label>
+  <input
+    type="text"
+    name="vehiclesBranded"
+    id="vehiclesBranded"
+    required
+    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+  />
+</div>
+<div>
+  <label htmlFor="campaignFocus" className="block text-sm font-medium text-gray-700">
+    Campaign Focus
+  </label>
+  <input
+    type="text"
+    name="campaignFocus"
+    id="campaignFocus"
+    required
+    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+  />
+</div>
+        <div>
           <SubmitButton>Create Project</SubmitButton>
         </div>
       </form>

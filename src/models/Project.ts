@@ -7,6 +7,8 @@ export interface IProject extends Document {
   description: string;
   imageUrl: string;
   displayOrder: number;
+  vehiclesBranded: string;
+  campaignFocus: string;
 }
 
 // This is the Mongoose schema
@@ -17,6 +19,8 @@ const ProjectSchema: Schema = new Schema(
     description: { type: String, required: true },
     imageUrl: { type: String, required: true },
     displayOrder: { type: Number, default: 0 },
+    vehiclesBranded: { type: String, required: true },
+    campaignFocus: { type: String, required: true },
   },
   { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );

@@ -1,9 +1,6 @@
 'use server';
 
-import { Resend } from 'resend';
-
-// Initialize Resend with the API key from your .env.local file
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from 'nodemailer';
 
 interface FormState {
   message: string;
@@ -19,19 +16,31 @@ export async function sendContactEmailAction(prevState: FormState, formData: For
     return { message: '', error: 'All fields are required.' };
   }
 
-  try {
-    await resend.emails.send({
-      from: 'Contact Form <onboarding@resend.dev>', // This is a default address that works out of the box.
-      to: 'anjalshrestha13@gmail.com', // IMPORTANT: Change this to the email where you want to receive messages.
-      subject: `New Message from ${name} - Keep Rolling Media`,
-      reply_to: email,
-      html: `<p>You have a new message from your website contact form.</p>
-             <p><strong>Name:</strong> ${name}</p>
-             <p><strong>Email:</strong> ${email}</p>
-             <p><strong>Message:</strong></p>
-             <p>${message}</p>`,
-    });
+  // Setup the email transporter using your Gmail credentials
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_SERVER_USER,
+      pass: process.env.EMAIL_SERVER_PASSWORD,
+    },
+  });
 
+  // Define the email options
+  const mailOptions = {
+    from: `"${name}" <${email}>`, // This shows the sender's name and email in your inbox
+    to: process.env.EMAIL_SERVER_USER, // The email will be sent to yourself
+    subject: `New Message from ${name} - Keep Rolling Media Website`,
+    replyTo: email,
+    html: `<h1>New Contact Form Submission</h1>
+           <p><strong>Name:</strong> ${name}</p>
+           <p><strong>Email:</strong> ${email}</p>
+           <hr>
+           <p><strong>Message:</strong></p>
+           <p>${message.replace(/\n/g, '<br>')}</p>`, // Formats the message for HTML
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
     return { message: 'Thank you for your message! We will get back to you soon.' };
   } catch (error) {
     console.error('Failed to send email:', error);

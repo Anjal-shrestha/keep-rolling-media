@@ -32,7 +32,7 @@ export default function Navbar() {
             src="/logo.png" 
             alt="Keep Rolling Media" 
             width={180} // Slightly adjusted width for better proportion
-            height={45} 
+            height={100} 
             style={{ objectFit: 'contain' }}
             priority // Prioritize loading the logo
           />
@@ -42,6 +42,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-8">
           <Link href="/" className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Home</Link>
           <Link href="/about" className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">About Us</Link>
+          <Link href={"/services"} className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Services</Link>
           <Link href="/our-work" className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Our Work</Link>
           <Link href="/blog" className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Blog</Link>
           <Link href="/contact" className="bg-red-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-700 transition-transform duration-300 hover:scale-105">Contact Us</Link>
