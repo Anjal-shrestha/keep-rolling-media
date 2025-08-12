@@ -1,9 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-   serverActions: {
-    bodySizeLimit: '10mb', // Increase the limit to 10MB
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       {
@@ -13,6 +9,12 @@ const nextConfig: NextConfig = {
         pathname: '**',
       },
     ],
+  },
+  // The serverActions bodySizeLimit is now configured under experimental
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
   },
 };
 

@@ -34,7 +34,9 @@ export async function generateStaticParams() {
 export default async function BlogPostPage({ params }: Params) {
   await connectDB();
 
-  const post = (await BlogPost.findOne({ slug: params.slug }).lean()) as unknown as BlogPostType | null;
+  const post = (await BlogPost.findOne({ slug: params.slug }).lean()) as
+    | BlogPostType
+    | null;
 
   if (!post) {
     notFound();
@@ -44,9 +46,14 @@ export default async function BlogPostPage({ params }: Params) {
     <>
       <Head>
         <title>{post.metaTitle || post.title}</title>
-        <meta name="description" content={post.metaDescription || post.content.slice(0, 150)} />
+        <meta
+          name="description"
+          content={post.metaDescription || post.content.slice(0, 150)}
+        />
         <meta property="og:title" content={post.metaTitle || post.title} />
-        {post.featuredImageUrl && <meta property="og:image" content={post.featuredImageUrl} />}
+        {post.featuredImageUrl && (
+          <meta property="og:image" content={post.featuredImageUrl} />
+        )}
       </Head>
 
       <article className="max-w-3xl mx-auto py-16 px-4 sm:px-6 lg:px-8 prose prose-red prose-lg sm:prose-xl">
@@ -62,17 +69,23 @@ export default async function BlogPostPage({ params }: Params) {
               className="object-cover w-full"
               priority
               placeholder="blur"
-              blurDataURL="/placeholder.png" // optional
+              blurDataURL="/placeholder.png" // optional placeholder
             />
           </div>
         )}
 
         <ReactMarkdown
           components={{
-            h2: ({ node, ...props }) => <h2 className="text-3xl font-semibold mt-14 mb-6" {...props} />,
-            h3: ({ node, ...props }) => <h3 className="text-2xl font-semibold mt-10 mb-5" {...props} />,
-            p: ({ node, ...props }) => <p className="leading-relaxed mb-6 text-gray-800" {...props} />,
-            a: ({ node, ...props }) => (
+            h2: (props) => (
+              <h2 className="text-3xl font-semibold mt-14 mb-6" {...props} />
+            ),
+            h3: (props) => (
+              <h3 className="text-2xl font-semibold mt-10 mb-5" {...props} />
+            ),
+            p: (props) => (
+              <p className="leading-relaxed mb-6 text-gray-800" {...props} />
+            ),
+            a: (props) => (
               <a
                 {...props}
                 className="text-[#d90429] hover:text-[#9f1239] underline transition-colors duration-200"
@@ -80,12 +93,18 @@ export default async function BlogPostPage({ params }: Params) {
                 rel="noopener noreferrer"
               />
             ),
-            ul: ({ node, ...props }) => <ul className="list-disc list-inside mb-6" {...props} />,
-            blockquote: ({ node, ...props }) => (
-              <blockquote className="border-l-4 border-red-500 pl-4 italic text-gray-600 my-8" {...props} />
+            ul: (props) => <ul className="list-disc list-inside mb-6" {...props} />,
+            blockquote: (props) => (
+              <blockquote
+                className="border-l-4 border-red-500 pl-4 italic text-gray-600 my-8"
+                {...props}
+              />
             ),
-            code: ({ node, ...props }) => (
-              <code className="bg-gray-100 rounded px-1 py-0.5 font-mono text-sm" {...props} />
+            code: (props) => (
+              <code
+                className="bg-gray-100 rounded px-1 py-0.5 font-mono text-sm"
+                {...props}
+              />
             ),
           }}
         >
