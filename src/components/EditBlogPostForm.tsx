@@ -5,34 +5,28 @@ import { updateBlogPostAction } from '@/app/actions/blogActions';
 import SubmitButton from '@/components/SubmitButton';
 import TiptapEditor from '@/components/TiptapEditor';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { IBlogPost } from '@/models/BlogPost';
 
-const initialState = { message: '' };
+// Define a type for the PLAIN post object, not the Mongoose document
+type PlainPostType = {
+  _id: string;
+  title: string;
+  content: string;
+  featuredImageUrl: string;
+};
 
-export default function EditBlogPostForm({ postId }: { postId: string }) {
-  const [post, setPost] = useState<IBlogPost | null>(null);
+const initialState = { message: '', error: '' };
+
+export default function EditBlogPostForm({ post }: { post: PlainPostType }) {
   const [state, formAction] = useActionState(updateBlogPostAction, initialState);
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      // We'll create this simple API route next
-      const response = await fetch(`/api/posts/${postId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setPost(data);
-      }
-    };
-    fetchPost();
-  }, [postId]);
-
-  if (!post) {
-    return <div>Loading editor...</div>;
-  }
 
   return (
     <form action={formAction} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+      {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
+      {state?.message && <p className="text-green-600 text-sm">{state.message}</p>}
+
+      {/* This will now work because post._id is guaranteed to be a string */}
       <input type="hidden" name="postId" value={post._id} />
+
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
           Post Title

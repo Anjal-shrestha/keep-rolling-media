@@ -1,4 +1,3 @@
-import { createTestimonialAction } from '@/app/actions/testimonialActions';
 import TestimonialForm from '@/components/TestimonialForm';
 import TestimonialList from '@/components/TestimonialList';
 import { Suspense } from 'react';
