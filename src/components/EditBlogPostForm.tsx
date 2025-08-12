@@ -6,7 +6,8 @@ import SubmitButton from '@/components/SubmitButton';
 import TiptapEditor from '@/components/TiptapEditor';
 import Image from 'next/image';
 
-// Define a type for the PLAIN post object, not the Mongoose document
+
+// Define a type for the PLAIN post object
 type PlainPostType = {
   _id: string;
   title: string;
@@ -21,12 +22,11 @@ export default function EditBlogPostForm({ post }: { post: PlainPostType }) {
 
   return (
     <form action={formAction} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+      {/* This section displays feedback and fixes the "unused state" warning */}
       {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
       {state?.message && <p className="text-green-600 text-sm">{state.message}</p>}
 
-      {/* This will now work because post._id is guaranteed to be a string */}
       <input type="hidden" name="postId" value={post._id} />
-
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
           Post Title

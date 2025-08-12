@@ -14,7 +14,7 @@ export default async function BlogListPage() {
     return {
       ...plainObject,
       _id: plainObject._id.toString(),
-      createdAt: plainObject.createdAt.toISOString(), // Ensure date is a string
+      createdAt: plainObject.createdAt.toISOString(), // Ensure date is a serializable string
     };
   });
 
