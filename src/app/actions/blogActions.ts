@@ -4,23 +4,30 @@ import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 
-// Configure Cloudinary (ensure your .env.local is set up)
+// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+interface FormState {
+  message: string;
+  error?: string;
+}
+type CloudinaryUploadResult = UploadApiResponse | undefined;
+
 // --- CREATE BLOG POST ---
-export async function createBlogPostAction(formData: FormData) {
+// The signature MUST accept prevState and formData
+export async function createBlogPostAction(prevState: FormState, formData: FormData): Promise<FormState> {
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
   const imageFile = formData.get('image') as File;
 
   if (!imageFile || imageFile.size === 0) {
-    return { message: 'Featured image is required.' };
+    return { message: '', error: 'Featured image is required.' };
   }
 
   // Create a URL-friendly slug from the title
@@ -29,12 +36,16 @@ export async function createBlogPostAction(formData: FormData) {
   // Upload image to Cloudinary
   const bytes = await imageFile.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  const uploadResult = await new Promise((resolve, reject) => {
+  const uploadResult = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
     cloudinary.uploader.upload_stream({ folder: 'keep_rolling_media_blog' }, (error, result) => {
       if (error) reject(error);
       resolve(result);
     }).end(buffer);
   });
+  
+  if (!uploadResult) {
+      return { message: '', error: 'Image upload failed.' };
+  }
 
   await connectDB();
 
@@ -42,14 +53,14 @@ export async function createBlogPostAction(formData: FormData) {
     title,
     slug,
     content,
-    featuredImageUrl: (uploadResult as any).secure_url,
+    featuredImageUrl: uploadResult.secure_url,
   };
 
   try {
     await new BlogPost(newPost).save();
   } catch (error) {
     console.error('Failed to create blog post:', error);
-    return { message: 'Failed to create blog post. The slug might already exist.' };
+    return { message: '', error: 'Failed to create blog post. The slug might already exist.' };
   }
 
   revalidatePath('/blog');
@@ -58,7 +69,8 @@ export async function createBlogPostAction(formData: FormData) {
 }
 
 // --- UPDATE BLOG POST ---
-export async function updateBlogPostAction(postId: string, formData: FormData) {
+export async function updateBlogPostAction(prevState: FormState, formData: FormData): Promise<FormState> {
+  const postId = formData.get('postId') as string;
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
   const imageFile = formData.get('image') as File;
@@ -69,13 +81,15 @@ export async function updateBlogPostAction(postId: string, formData: FormData) {
   if (imageFile && imageFile.size > 0) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const uploadResult = await new Promise((resolve, reject) => {
+    const uploadResult = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
       cloudinary.uploader.upload_stream({ folder: 'keep_rolling_media_blog' }, (error, result) => {
         if (error) reject(error);
         resolve(result);
       }).end(buffer);
     });
-    featuredImageUrl = (uploadResult as any).secure_url;
+    if (uploadResult) {
+      featuredImageUrl = uploadResult.secure_url;
+    }
   }
 
   const updatedFields: { title: string; slug: string; content: string; featuredImageUrl?: string } = {
@@ -94,11 +108,11 @@ export async function updateBlogPostAction(postId: string, formData: FormData) {
     await BlogPost.findByIdAndUpdate(postId, updatedFields);
   } catch (error) {
     console.error('Failed to update blog post:', error);
-    return { message: 'Failed to update blog post.' };
+    return { message: '', error: 'Failed to update blog post.' };
   }
 
   revalidatePath('/blog');
-  revalidatePath(`/blog/${slug}`); // Revalidate specific blog post page
+  revalidatePath(`/blog/${slug}`);
   revalidatePath('/admin/dashboard/blog');
   redirect('/admin/dashboard/blog');
 }
@@ -112,7 +126,6 @@ export async function deleteBlogPostAction(postId: string) {
     await BlogPost.findByIdAndDelete(postId);
   } catch (error) {
     console.error('Failed to delete blog post:', error);
-    return { message: 'Failed to delete blog post.' };
   }
 
   revalidatePath('/blog');

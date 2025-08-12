@@ -15,7 +15,7 @@ export default async function TestimonialsSection() {
   const plainTestimonials = JSON.parse(JSON.stringify(testimonials));
 
   return (
-    <section className="bg-white py-16">
+    <section className="bg-white py-6">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
           What Our Clients Say

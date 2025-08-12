@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { createBlogPostAction } from '@/app/actions/blogActions';
 import SubmitButton from '@/components/SubmitButton';
-import RichTextEditor from '@/components/RichTextEditor'; // Import the new editor
+import TiptapEditor from '@/components/TiptapEditor'; // 1. Correct the import name
 
 const initialState = { message: '' };
 
@@ -44,8 +44,8 @@ export default function NewBlogPostPage() {
           <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
             Content
           </label>
-          {/* Replace the textarea with the RichTextEditor */}
-          <RichTextEditor name="content" />
+          {/* 2. Use the correct component name here */}
+          <TiptapEditor name="content" />
         </div>
         <div>
           <SubmitButton>Create Post</SubmitButton>

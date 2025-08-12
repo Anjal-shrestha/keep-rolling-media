@@ -10,11 +10,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -23,18 +19,22 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-white shadow-md'}`}
+      className={`sticky top-0 z-50 bg-white transition-all duration-300 ${isScrolled ? 'shadow-md border-b border-gray-200' : ''}`}
     >
-      <nav className="container mx-auto px-6 flex justify-between items-center transition-all duration-300" style={{ height: isScrolled ? '60px' : '80px' }}>
+      <nav
+        className="container mx-auto px-6 flex justify-between items-center transition-all duration-300"
+        // Reduced padding values for a shorter navbar
+        style={{ paddingTop: isScrolled ? '0.25rem' : '0.75rem', paddingBottom: isScrolled ? '0.25rem' : '0.75rem' }}
+      >
         {/* Logo container */}
-        <Link href="/" className="h-full flex items-center">
+        <Link href="/" className="flex items-center">
           <Image 
             src="/logo.png" 
             alt="Keep Rolling Media" 
-            width={180} // Slightly adjusted width for better proportion
-            height={100} 
+            width={150} // Reduced logo size to match
+            height={35}  // Reduced logo size to match
             style={{ objectFit: 'contain' }}
-            priority // Prioritize loading the logo
+            priority
           />
         </Link>
 
@@ -61,11 +61,12 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} bg-white shadow-lg`}>
         <div className="px-2 pt-2 pb-4 space-y-2">
-          <Link href="/" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Home</Link>
-          <Link href="/about" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">About Us</Link>
-          <Link href="/our-work" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Our Work</Link>
-          <Link href="/blog" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Blog</Link>
-          <Link href="/contact" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Contact Us</Link>
+            <Link href="/" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Home</Link>
+            <Link href="/about" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">About Us</Link>
+            <Link href="/services" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Services</Link>
+            <Link href="/our-work" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Our Work</Link>
+            <Link href="/blog" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Blog</Link>
+            <Link href="/contact" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Contact Us</Link>
         </div>
       </div>
     </header>

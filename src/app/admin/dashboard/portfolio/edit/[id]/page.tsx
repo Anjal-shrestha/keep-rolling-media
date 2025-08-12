@@ -1,23 +1,41 @@
-import { updateProjectAction } from '@/app/actions/portfolioActions';
-import connectDB from '@/lib/mongodb';
-import Project from '@/models/Project';
-import Image from 'next/image';
+'use client';
 
-export default async function EditPortfolioProjectPage({ params }: { params: { id: string } }) {
-  await connectDB();
-  const project = JSON.parse(JSON.stringify(await Project.findById(params.id)));
+import { useActionState } from 'react';
+import { updateProjectAction } from '@/app/actions/portfolioActions';
+import SubmitButton from '@/components/SubmitButton';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { IProject } from '@/models/Project';
+
+const initialState = {
+  message: '',
+};
+
+export default function EditPortfolioProjectPage({ params }: { params: { id: string } }) {
+  const [project, setProject] = useState<IProject | null>(null);
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      const response = await fetch(`/api/projects/${params.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProject(data);
+      }
+    };
+    fetchProject();
+  }, [params.id]);
+
+  const [state, formAction] = useActionState(updateProjectAction, initialState);
 
   if (!project) {
-    return <div>Project not found.</div>;
+    return <div className="container mx-auto p-8">Loading project data...</div>;
   }
-
-  const updateActionWithId = updateProjectAction.bind(null, project._id.toString());
 
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Edit Portfolio Project</h1>
-      {/* The encType attribute was added here */}
-      <form action={updateActionWithId} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+      <form action={formAction} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+        <input type="hidden" name="projectId" value={project._id} />
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             Project Title
@@ -28,7 +46,7 @@ export default async function EditPortfolioProjectPage({ params }: { params: { i
             id="title"
             required
             defaultValue={project.title}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
         <div>
@@ -41,7 +59,7 @@ export default async function EditPortfolioProjectPage({ params }: { params: { i
             id="clientName"
             required
             defaultValue={project.clientName}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
         <div>
@@ -54,9 +72,38 @@ export default async function EditPortfolioProjectPage({ params }: { params: { i
             rows={4}
             required
             defaultValue={project.description}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           ></textarea>
         </div>
+
+        {/* CORRECTED FIELDS BELOW */}
+        <div>
+          <label htmlFor="vehiclesBranded" className="block text-sm font-medium text-gray-700">
+            Vehicles Branded (e.g., "200 Taxis")
+          </label>
+          <input
+            type="text"
+            name="vehiclesBranded"
+            id="vehiclesBranded"
+            required
+            defaultValue={project.vehiclesBranded}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+        </div>
+        <div>
+          <label htmlFor="campaignFocus" className="block text-sm font-medium text-gray-700">
+            Campaign Focus
+          </label>
+          <input
+            type="text"
+            name="campaignFocus"
+            id="campaignFocus"
+            required
+            defaultValue={project.campaignFocus}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+        </div>
+
         <div>
           <label htmlFor="image" className="block text-sm font-medium text-gray-700">
             Change Project Image (Optional)
@@ -72,37 +119,9 @@ export default async function EditPortfolioProjectPage({ params }: { params: { i
             />
           </div>
         </div>
+
         <div>
-  <label htmlFor="vehiclesBranded" className="block text-sm font-medium text-gray-700">
-    Vehicles Branded (e.g., "200 Taxis")
-  </label>
-  <input
-    type="text"
-    name="vehiclesBranded"
-    id="vehiclesBranded"
-    required
-    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-  />
-</div>
-<div>
-  <label htmlFor="campaignFocus" className="block text-sm font-medium text-gray-700">
-    Campaign Focus
-  </label>
-  <input
-    type="text"
-    name="campaignFocus"
-    id="campaignFocus"
-    required
-    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-  />
-</div>
-        <div>
-          <button
-            type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          >
-            Update Project
-          </button>
+          <SubmitButton>Update Project</SubmitButton>
         </div>
       </form>
     </div>

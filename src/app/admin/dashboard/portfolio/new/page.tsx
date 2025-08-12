@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react'; // Correct for React 19
 import { createProjectAction } from '@/app/actions/portfolioActions';
 import SubmitButton from '@/components/SubmitButton';
 
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export default function NewPortfolioProjectPage() {
-  const [state, formAction] = useFormState(createProjectAction, initialState);
+  const [state, formAction] = useActionState(createProjectAction, initialState);
 
   return (
     <div>
@@ -25,7 +25,7 @@ export default function NewPortfolioProjectPage() {
             name="title"
             id="title"
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
         <div>
@@ -37,7 +37,7 @@ export default function NewPortfolioProjectPage() {
             name="clientName"
             id="clientName"
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
         <div>
@@ -49,7 +49,7 @@ export default function NewPortfolioProjectPage() {
             id="description"
             rows={4}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           ></textarea>
         </div>
         <div>
@@ -66,29 +66,29 @@ export default function NewPortfolioProjectPage() {
           />
         </div>
         <div>
-  <label htmlFor="vehiclesBranded" className="block text-sm font-medium text-gray-700">
-    Vehicles Branded (e.g., "200 Taxis")
-  </label>
-  <input
-    type="text"
-    name="vehiclesBranded"
-    id="vehiclesBranded"
-    required
-    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-  />
-</div>
-<div>
-  <label htmlFor="campaignFocus" className="block text-sm font-medium text-gray-700">
-    Campaign Focus
-  </label>
-  <input
-    type="text"
-    name="campaignFocus"
-    id="campaignFocus"
-    required
-    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-  />
-</div>
+          <label htmlFor="vehiclesBranded" className="block text-sm font-medium text-gray-700">
+            Vehicles Branded (e.g., "200 Taxis")
+          </label>
+          <input
+            type="text"
+            name="vehiclesBranded"
+            id="vehiclesBranded"
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+        </div>
+        <div>
+          <label htmlFor="campaignFocus" className="block text-sm font-medium text-gray-700">
+            Campaign Focus
+          </label>
+          <input
+            type="text"
+            name="campaignFocus"
+            id="campaignFocus"
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+        </div>
         <div>
           <SubmitButton>Create Project</SubmitButton>
         </div>

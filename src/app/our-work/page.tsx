@@ -1,3 +1,5 @@
+import TestimonialCarousel from '@/components/TestimonialCarousel';
+import TestimonialsSection from '@/components/TestimonialsSection';
 import connectDB from '@/lib/mongodb';
 import Project from '@/models/Project';
 import Image from 'next/image';
@@ -7,9 +9,9 @@ export default async function OurWorkPage() {
   const projects = await Project.find({}).sort({ createdAt: -1 });
 
   return (
-    <div className="bg-white">
+    <div className="bg-white py-2">
       {/* Header Section */}
-      <section className="bg-gray-50 py-20 text-center">
+      <section className="bg-gray-50 py-5 text-center">
         <div className="container mx-auto px-6 animate-fade-in-down">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">Clients & Projects</h1>
           <p className="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
@@ -19,7 +21,7 @@ export default async function OurWorkPage() {
       </section>
 
       {/* Accomplishments Section */}
-      <section className="py-16">
+      <section className="py-4">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="bg-white p-6 rounded-lg shadow-md border">
@@ -39,7 +41,7 @@ export default async function OurWorkPage() {
       </section>
 
       {/* Projects Table Section */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-gray-50 py-8">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800">Some of Our Projects</h2>
@@ -76,6 +78,7 @@ export default async function OurWorkPage() {
           </div>
         </div>
       </section>
+      <TestimonialsSection />
     </div>
   );
 }
