@@ -49,19 +49,48 @@ export default async function BlogPostPage({ params }: Params) {
         {post.featuredImageUrl && <meta property="og:image" content={post.featuredImageUrl} />}
       </Head>
 
-      <article className="prose mx-auto py-10 max-w-3xl">
-        <h1>{post.title}</h1>
+      <article className="max-w-3xl mx-auto py-16 px-4 sm:px-6 lg:px-8 prose prose-red prose-lg sm:prose-xl">
+        <h1 className="text-5xl font-extrabold mb-8">{post.title}</h1>
+
         {post.featuredImageUrl && (
-          <Image
-            src={post.featuredImageUrl}
-            alt={post.title}
-            width={800}
-            height={450}
-            className="rounded mb-6"
-            priority
-          />
+          <div className="mb-12 rounded overflow-hidden shadow-lg">
+            <Image
+              src={post.featuredImageUrl}
+              alt={post.title}
+              width={900}
+              height={500}
+              className="object-cover w-full"
+              priority
+              placeholder="blur"
+              blurDataURL="/placeholder.png" // optional
+            />
+          </div>
         )}
-        <ReactMarkdown>{post.content}</ReactMarkdown>
+
+        <ReactMarkdown
+          components={{
+            h2: ({ node, ...props }) => <h2 className="text-3xl font-semibold mt-14 mb-6" {...props} />,
+            h3: ({ node, ...props }) => <h3 className="text-2xl font-semibold mt-10 mb-5" {...props} />,
+            p: ({ node, ...props }) => <p className="leading-relaxed mb-6 text-gray-800" {...props} />,
+            a: ({ node, ...props }) => (
+              <a
+                {...props}
+                className="text-[#d90429] hover:text-[#9f1239] underline transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            ),
+            ul: ({ node, ...props }) => <ul className="list-disc list-inside mb-6" {...props} />,
+            blockquote: ({ node, ...props }) => (
+              <blockquote className="border-l-4 border-red-500 pl-4 italic text-gray-600 my-8" {...props} />
+            ),
+            code: ({ node, ...props }) => (
+              <code className="bg-gray-100 rounded px-1 py-0.5 font-mono text-sm" {...props} />
+            ),
+          }}
+        >
+          {post.content}
+        </ReactMarkdown>
       </article>
     </>
   );
