@@ -4,9 +4,9 @@ import BlogPost from '@/models/BlogPost';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params; // Await the promise here
   await connectDB();
   const post = await BlogPost.findById(id);
 

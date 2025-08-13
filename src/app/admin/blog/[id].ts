@@ -1,29 +1,37 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
-
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   await connectDB();
+  const post = await BlogPost.findById(id);
+  if (!post) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+  return NextResponse.json(post);
+}
 
-  if (req.method === 'GET') {
-    const post = await BlogPost.findById(id);
-    if (!post) return res.status(404).json({ message: 'Not found' });
-    return res.status(200).json(post);
-  } else if (req.method === 'PUT') {
-    // Update via server actions, so disallow API PUT here for now
-    return res.status(405).json({ message: 'Use server actions to update blog posts.' });
-  } else if (req.method === 'DELETE') {
-    try {
-      await BlogPost.findByIdAndDelete(id);
-      return res.status(200).json({ message: 'Deleted' });
-    } catch (e) {
-      console.error('Failed to delete blog post:', e);
-      return res.status(500).json({ message: 'Failed to delete' });
-    }
-  } else {
-    res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Logic for PUT can be added here if needed in the future
+  return NextResponse.json({ message: 'Use server actions to update blog posts.' }, { status: 405 });
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  await connectDB();
+  try {
+    await BlogPost.findByIdAndDelete(id);
+    return NextResponse.json({ message: 'Deleted' });
+  } catch (e) {
+    console.error('Failed to delete blog post:', e);
+    return NextResponse.json({ message: 'Failed to delete' }, { status: 500 });
   }
 }
