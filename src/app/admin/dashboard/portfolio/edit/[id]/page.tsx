@@ -26,12 +26,12 @@ async function EditPortfolioLoader({ projectId }: { projectId: string }) {
   );
 }
 
-// Main page — fix: await the params Promise
+// Main page — This now correctly handles the props type for Next.js 15
 export default async function EditPortfolioProjectPage({
   params,
 }: {
-  params: Promise<{ id: string }>; // ✅ params must be a Promise
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params; // ✅ await the params
+  const { id } = await params; // Await the params promise to get the id
   return <EditPortfolioLoader projectId={id} />;
 }
