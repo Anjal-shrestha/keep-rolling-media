@@ -3,8 +3,7 @@ import Project from '@/models/Project';
 import EditProjectForm from '@/components/EditProjectForm';
 import { notFound } from 'next/navigation';
 
-// This is a new child component that will contain all the logic.
-// This pattern is more robust for Next.js production builds.
+// Loader component handles DB connection + fetching project
 async function EditPortfolioLoader({ projectId }: { projectId: string }) {
   await connectDB();
   const project = await Project.findById(projectId);
@@ -13,7 +12,7 @@ async function EditPortfolioLoader({ projectId }: { projectId: string }) {
     notFound();
   }
 
-  // Prepare a clean, plain object to pass to the client component
+  // Prepare a clean object for the client component
   const plainProject = {
     ...project.toObject(),
     _id: project._id.toString(),
@@ -27,9 +26,12 @@ async function EditPortfolioLoader({ projectId }: { projectId: string }) {
   );
 }
 
-
-// The main page component is now very simple.
-// Its only job is to get the ID from the params and pass it to the loader component.
-export default function EditPortfolioProjectPage({ params }: { params: { id: string } }) {
-  return <EditPortfolioLoader projectId={params.id} />;
+// Main page — correctly handles async params in Next.js 15
+export default async function EditPortfolioProjectPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params; // Await because params is now a Promise
+  return <EditPortfolioLoader projectId={id} />;
 }
