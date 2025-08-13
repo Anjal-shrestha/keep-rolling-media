@@ -4,7 +4,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import ConditionalLayout from '@/components/ConditionalLayout';
 const inter = Inter({ subsets: ['latin'] });
-
+export const dynamic = 'force-dynamic'; 
+export const revalidate = 0;     
 export const metadata: Metadata = {
   title: 'Keep Rolling Media - Taking Brands to Places',
   description: 'Bus branding and advertisement company in Nepal.',
