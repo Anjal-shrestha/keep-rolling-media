@@ -3,13 +3,6 @@ import Project from '@/models/Project';
 import EditProjectForm from '@/components/EditProjectForm';
 import { notFound } from 'next/navigation';
 
-// Define a type for the page's props, including params
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
 // Loader component handles DB connection + fetching project
 async function EditPortfolioLoader({ projectId }: { projectId: string }) {
   await connectDB();
@@ -33,7 +26,11 @@ async function EditPortfolioLoader({ projectId }: { projectId: string }) {
   );
 }
 
-// Main page component using the new Props type
-export default async function EditPortfolioProjectPage({ params }: Props) {
+// Main page — This now correctly handles the props type for Next.js
+export default async function EditPortfolioProjectPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   return <EditPortfolioLoader projectId={params.id} />;
 }
