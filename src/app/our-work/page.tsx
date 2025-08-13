@@ -2,7 +2,7 @@ import connectDB from '@/lib/mongodb';
 import Project, { IProject } from '@/models/Project';
 import Image from 'next/image';
 import TestimonialsSection from '@/components/TestimonialsSection';
-
+export const dynamic = 'force-dynamic';
 export default async function OurWorkPage() {
   await connectDB();
   const projects: IProject[] = await Project.find({}).sort({ createdAt: -1 });

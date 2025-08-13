@@ -2,6 +2,7 @@ import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 import Link from 'next/link';
 import Image from 'next/image';
+export const dynamic = 'force-dynamic';
 export default async function BlogPage() {
   await connectDB();
   const posts = await BlogPost.find({}).sort({ publishedAt: -1 }).lean();
