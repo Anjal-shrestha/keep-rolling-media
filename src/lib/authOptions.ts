@@ -17,28 +17,19 @@ export const authOptions = {
         }
 
         await connectDB();
-
         const user = await User.findOne({ email: credentials.email });
-
-        if (!user) {
-          return null;
-        }
+        if (!user) return null;
 
         const passwordsMatch = await bcrypt.compare(
           credentials.password,
           user.password
         );
-
-        if (!passwordsMatch) {
-          return null;
-        }
+        if (!passwordsMatch) return null;
 
         return { id: user._id.toString(), name: user.email, email: user.email };
       },
     }),
   ],
-  pages: {
-    signIn: '/admin/login',
-  },
+  pages: { signIn: '/admin/login' },
   secret: process.env.NEXTAUTH_SECRET,
 };
