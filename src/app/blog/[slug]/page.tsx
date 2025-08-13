@@ -19,12 +19,7 @@ type BlogPostType = {
   content: string;
 };
 
-export async function generateStaticParams() {
-  await connectDB();
-  const posts = await BlogPost.find({}).select('slug').lean();
-  const typedPosts = posts as unknown as Array<{ slug: string }>;
-  return typedPosts.map(post => ({ slug: post.slug }));
-}
+
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params; // Await the promise
