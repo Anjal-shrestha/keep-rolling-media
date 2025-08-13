@@ -6,7 +6,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params; // Await the promise here
+  const { id } = await params; // Await the promise
   await connectDB();
   const post = await BlogPost.findById(id);
 

@@ -5,10 +5,10 @@ import Head from 'next/head';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 
-type Params = {
-  params: {
+type PageProps = {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 type BlogPostType = {
@@ -21,22 +21,15 @@ type BlogPostType = {
 
 export async function generateStaticParams() {
   await connectDB();
-
-  const posts = await BlogPost.find({})
-    .select('slug')
-    .lean();
-
+  const posts = await BlogPost.find({}).select('slug').lean();
   const typedPosts = posts as unknown as Array<{ slug: string }>;
-
   return typedPosts.map(post => ({ slug: post.slug }));
 }
 
-export default async function BlogPostPage({ params }: Params) {
+export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params; // Await the promise
   await connectDB();
-
-  const post = (await BlogPost.findOne({ slug: params.slug }).lean()) as
-    | BlogPostType
-    | null;
+  const post = (await BlogPost.findOne({ slug: slug }).lean()) as BlogPostType | null;
 
   if (!post) {
     notFound();
@@ -58,7 +51,6 @@ export default async function BlogPostPage({ params }: Params) {
 
       <article className="max-w-3xl mx-auto py-16 px-4 sm:px-6 lg:px-8 prose prose-red prose-lg sm:prose-xl">
         <h1 className="text-5xl font-extrabold mb-8">{post.title}</h1>
-
         {post.featuredImageUrl && (
           <div className="mb-12 rounded overflow-hidden shadow-lg">
             <Image
@@ -73,7 +65,6 @@ export default async function BlogPostPage({ params }: Params) {
             />
           </div>
         )}
-
         <ReactMarkdown
           components={{
             h2: (props) => (

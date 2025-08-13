@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 
+// GET request handler
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -9,20 +10,23 @@ export async function GET(
   const { id } = await params;
   await connectDB();
   const post = await BlogPost.findById(id);
-  if (!post) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+  if (!post) {
+    return NextResponse.json({ message: 'Not found' }, { status: 404 });
+  }
   return NextResponse.json(post);
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  // Logic for PUT can be added here if needed in the future
-  return NextResponse.json({ message: 'Use server actions to update blog posts.' }, { status: 405 });
+// PUT request handler - Unused parameters are now completely removed
+export async function PUT() {
+  return NextResponse.json(
+    { message: 'Use server actions to update blog posts.' },
+    { status: 405 }
+  );
 }
 
+// DELETE request handler - Unused 'req' parameter is removed
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest, // Keeping req in case of future auth needs, but unused for now
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
