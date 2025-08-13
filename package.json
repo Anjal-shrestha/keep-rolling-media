@@ -2,15 +2,13 @@
   "name": "keep-rolling-media",
   "version": "0.1.0",
   "private": true,
-"scripts": {
-  "dev": "next dev",
-  "build": "NODE_OPTIONS=--max-old-space-size=4096 next build",
-  "start": "next start",
-  "lint": "next lint"
-},
+  "scripts": {
+    "dev": "next dev",
+    "build": "NODE_OPTIONS=--max-old-space-size=4096 next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
-    "@tiptap/react": "^3.1.0",
-    "@tiptap/starter-kit": "^3.1.0",
     "@types/bcrypt": "^6.0.0",
     "@types/marked": "^5.0.2",
     "@types/nodemailer": "^6.4.17",

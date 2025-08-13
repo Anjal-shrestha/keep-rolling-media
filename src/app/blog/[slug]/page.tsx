@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import Head from 'next/head';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
-
+export const dynamic = 'force-dynamic';
 type PageProps = {
   params: Promise<{
     slug: string;
