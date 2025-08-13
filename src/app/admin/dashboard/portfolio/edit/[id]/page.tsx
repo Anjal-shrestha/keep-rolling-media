@@ -30,8 +30,8 @@ async function EditPortfolioLoader({ projectId }: { projectId: string }) {
 export default async function EditPortfolioProjectPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params; // Await because params is now a Promise
+  const { id } = params; // No need for await here
   return <EditPortfolioLoader projectId={id} />;
 }
