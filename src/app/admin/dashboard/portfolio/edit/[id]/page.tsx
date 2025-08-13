@@ -26,11 +26,12 @@ async function EditPortfolioLoader({ projectId }: { projectId: string }) {
   );
 }
 
-// Main page — This now correctly handles the props type for Next.js
+// Main page — fix: await the params Promise
 export default async function EditPortfolioProjectPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>; // ✅ params must be a Promise
 }) {
-  return <EditPortfolioLoader projectId={params.id} />;
+  const { id } = await params; // ✅ await the params
+  return <EditPortfolioLoader projectId={id} />;
 }
