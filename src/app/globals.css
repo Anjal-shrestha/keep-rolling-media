@@ -40,3 +40,16 @@ html {
 .animate-slide {
   animation: slide 15s cubic-bezier(0.8, 0, 0.2, 1) infinite;
 }
+/* Animation for the infinite logo scroller */
+@keyframes scroll-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll-x {
+  animation: scroll-x 40s linear infinite;
+}

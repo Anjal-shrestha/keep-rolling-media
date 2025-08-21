@@ -45,6 +45,7 @@ export default function Navbar() {
           <Link href={"/services"} className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Services</Link>
           <Link href="/our-work" className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Our Work</Link>
           <Link href="/blog" className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Blog</Link>
+          <Link href="/gallery" className="text-gray-700 font-medium hover:text-red-600 transition-colors duration-300">Gallery</Link>
           <Link href="/contact" className="bg-red-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-700 transition-transform duration-300 hover:scale-105">Contact Us</Link>
         </div>
 
@@ -66,6 +67,7 @@ export default function Navbar() {
             <Link href="/services" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Services</Link>
             <Link href="/our-work" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Our Work</Link>
             <Link href="/blog" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Blog</Link>
+            <Link href="/gallery" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Gallery</Link>
             <Link href="/contact" className="block px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded">Contact Us</Link>
         </div>
       </div>

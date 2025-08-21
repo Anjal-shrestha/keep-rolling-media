@@ -18,6 +18,7 @@ export default function DashboardLayout({
     { href: '/admin/dashboard/blog', label: 'Manage Blog' },
     { href: '/admin/dashboard/clients', label: 'Manage Clients' },
     { href: '/admin/dashboard/testimonials', label: 'Manage Testimonials' },
+    { href: '/admin/dashboard/gallery', label: 'Manage Gallery' },
   ];
 
   return (

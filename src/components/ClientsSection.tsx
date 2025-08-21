@@ -10,7 +10,14 @@ type ClientType = {
 
 export default async function ClientsSection() {
   await connectDB();
-  const clients = await Client.find({}).sort({ createdAt: 'desc' }).limit(12);
+ 
+  const clients: ClientType[] = await Client.find({}).sort({ createdAt: 'desc' }).limit(20);
+
+  if (clients.length === 0) {
+    return null;
+  }
+
+  const extendedClients = [...clients, ...clients];
 
   return (
     <section className="bg-white py-16">
@@ -21,7 +28,7 @@ export default async function ClientsSection() {
             Proudly Partnered With Leading Brands Across Nepal
           </h2>
           <p className="mt-4 text-lg text-gray-600">
-            From mass transit fleets to targeted local runs, our projects span multiple industries and cities - delivering consistent brand visibility and engagement.
+            From mass transit fleets to targeted local runs, our projects span multiple industries and cities — delivering consistent brand visibility and engagement.
           </p>
         </div>
 
@@ -41,28 +48,23 @@ export default async function ClientsSection() {
           </div>
         </div>
 
-        {/* Client Logos */}
-        {clients.length > 0 && (
-          <div className="mt-16">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-              {JSON.parse(JSON.stringify(clients)).map((client: ClientType) => (
-                <div 
-                  key={client._id} 
-                  className="flex justify-center opacity-60 hover:opacity-100 transition-opacity duration-300"
-                >
-                  <Image
-                    src={client.logoUrl}
-                    alt={client.name}
-                    title={client.name}
-                    width={140}
-                    height={70}
-                    style={{ objectFit: 'contain' }}
-                  />
-                </div>
-              ))}
-            </div>
+        {/* Infinite Logo Scroller */}
+        <div className="mt-16 w-full overflow-hidden">
+          <div className="flex w-max animate-scroll-x hover:pause">
+            {extendedClients.map((client, index) => (
+              <div key={`${client._id}-${index}`} className="flex-shrink-0 w-48 h-24 flex items-center justify-center mx-2">
+                <Image
+                  src={client.logoUrl}
+                  alt={client.name}
+                  title={client.name}
+                  width={140}
+                  height={70}
+                  className="object-contain"
+                />
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
