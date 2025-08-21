@@ -7,7 +7,7 @@ export default function AboutPage() {
       <section className="relative py-20 md:py-28 bg-gray-900 text-white text-center">
         <div className="absolute inset-0">
           <Image
-            src="/about_usbg.png" // Make sure you have this image in /public
+            src="/rolling_media.png" // Make sure you have this image in /public
             alt="Bus advertising campaign in motion"
             layout="fill"
             objectFit="cover"

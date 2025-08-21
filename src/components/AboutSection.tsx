@@ -10,7 +10,7 @@ export default function AboutSection() {
           <div className="relative w-full h-80 rounded-lg overflow-hidden shadow-lg">
             {/* Make sure you have an image named 'about_usbg.png' in your /public folder */}
             <Image
-              src="/about_usbg.png"
+              src="/rolling_media.png"
               alt="Keep Rolling Media team and branded vehicles"
               layout="fill"
               objectFit="cover"

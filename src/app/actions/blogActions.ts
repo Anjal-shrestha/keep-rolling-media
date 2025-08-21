@@ -21,27 +21,23 @@ type CloudinaryUploadResult = UploadApiResponse | undefined;
 // --- CREATE BLOG POST ---
 export async function createBlogPostAction(prevState: FormState, formData: FormData): Promise<FormState> {
     const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
+    const excerpt = formData.get('excerpt') as string;
+    const category = formData.get('category') as string;
     const imageFile = formData.get('featuredImage') as File;
-    const introParagraph = formData.get('introParagraph') as string;
-    const subheading = formData.get('subheading') as string;
-    const conclusion = formData.get('conclusion') as string;
-    const bulletPoints = (formData.get('bulletPoints') as string || '')
-        .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
 
-    if (!title || !imageFile || imageFile.size === 0 || !introParagraph || !subheading || !conclusion) {
-        return { error: 'All fields, including a featured image, are required.' };
+    if (!title || !content || !imageFile || imageFile.size === 0) {
+        return { error: 'Title, Content, and a Featured Image are required.' };
     }
 
     const slug = title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
-    
+
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const uploadResult = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
         cloudinary.uploader.upload_stream({ folder: 'keep_rolling_media_blog' }, (error, result) => {
-        if (error) reject(error);
-        resolve(result);
+          if (error) reject(error);
+          resolve(result);
         }).end(buffer);
     });
 
@@ -54,21 +50,25 @@ export async function createBlogPostAction(prevState: FormState, formData: FormD
     const newPost = {
         title,
         slug,
+        content,
         featuredImageUrl: uploadResult.secure_url,
-        introParagraph,
-        subheading,
-        bulletPoints,
-        conclusion,
+        excerpt: excerpt || content.slice(0, 150),
+        category: category || 'Uncategorized',
     };
 
     try {
+        const existingPost = await BlogPost.findOne({ slug });
+        if (existingPost) {
+            return { error: 'A post with this title already exists. Please choose a unique title.' };
+        }
         await new BlogPost(newPost).save();
     } catch (error) {
         console.error('Failed to create post:', error);
-        return { error: 'Failed to create post. The title might already be in use.' };
+        return { error: 'Failed to save post to the database.' };
     }
 
     revalidatePath('/blog');
+    revalidatePath('/admin/dashboard/blog');
     redirect('/admin/dashboard/blog');
 }
 
@@ -96,7 +96,7 @@ export async function updateBlogPostAction(prevState: FormState, formData: FormD
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const uploadResult = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
-        cloudinary.uploader.upload_stream({ folder: 'blog_featured_images' }, (err, res) => {
+        cloudinary.uploader.upload_stream({ folder: 'keep_rolling_media_blog' }, (err, res) => {
           if (err) reject(err);
           resolve(res);
         }).end(buffer);
@@ -106,14 +106,21 @@ export async function updateBlogPostAction(prevState: FormState, formData: FormD
       }
     }
  
-    // **FIX IS HERE:** Changed 'any' to a more specific type
-    const updatedFields: { [key: string]: string | string[] | undefined } = {
+    const content = `${introParagraph}\n\n### ${subheading}\n\n${bulletPoints.map(item => `- ${item}`).join('\n')}\n\n${conclusion}`;
+    
+    // --- LINTING FIX IS HERE ---
+    // The type for updatedFields is now more specific than 'any'
+    const updatedFields: { 
+      title: string; 
+      slug: string; 
+      content: string; 
+      excerpt: string; 
+      featuredImageUrl?: string;
+    } = {
         title,
         slug,
-        introParagraph,
-        subheading,
-        bulletPoints,
-        conclusion,
+        content,
+        excerpt: introParagraph.slice(0, 150),
     };
  
     if (featuredImageUrl) {
@@ -125,13 +132,13 @@ export async function updateBlogPostAction(prevState: FormState, formData: FormD
     try {
       await BlogPost.findByIdAndUpdate(postId, updatedFields);
     } catch (error) {
-      // **FIX IS HERE:** Use the 'error' variable
       console.error('Failed to update post:', error);
       return { error: 'Failed to update post in the database.' };
     }
  
     revalidatePath('/blog');
     revalidatePath(`/blog/${slug}`);
+    revalidatePath('/admin/dashboard/blog');
     redirect('/admin/dashboard/blog');
 }
 
