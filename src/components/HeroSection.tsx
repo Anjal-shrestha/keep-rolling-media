@@ -22,6 +22,8 @@ export default function HeroSection() {
           {/* Main Heading */}
           <h1
             id="hero-title"
+            // --- FIX IS HERE ---
+            // Added the base 'text-4xl' class directly to the h1
             className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6 animate-fade-in-down"
           >
             <span className="block text-gray-900">
