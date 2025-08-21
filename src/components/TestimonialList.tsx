@@ -3,7 +3,7 @@ import Testimonial from '@/models/Testimonial';
 import DeleteTestimonialButton from './DeleteTestimonialButton';
 import Image from 'next/image';
 
-// Define a type for the plain testimonial object
+// Define a plain object type for type safety
 type TestimonialType = {
   _id: string;
   name: string;
@@ -16,17 +16,21 @@ export default async function TestimonialList() {
   await connectDB();
   const testimonials = await Testimonial.find({}).sort({ createdAt: -1 });
 
+  const plainTestimonials = JSON.parse(JSON.stringify(testimonials));
+
   return (
     <div className="space-y-4">
-      {JSON.parse(JSON.stringify(testimonials)).map((testimonial: TestimonialType) => (
+      {plainTestimonials.map((testimonial: TestimonialType) => (
         <div key={testimonial._id} className="bg-gray-50 p-4 rounded-md border flex items-start gap-4">
-          <Image
-            src={testimonial.imageUrl}
-            alt={testimonial.name}
-            width={60}
-            height={60}
-            className="rounded-full object-cover"
-          />
+          {testimonial.imageUrl && (
+            <Image
+              src={testimonial.imageUrl}
+              alt={testimonial.name}
+              width={60}
+              height={60}
+              className="rounded-full object-cover"
+            />
+          )}
           <div className="flex-1">
             <p className="font-bold">{testimonial.name}</p>
             <p className="text-sm text-gray-600">{testimonial.position}</p>

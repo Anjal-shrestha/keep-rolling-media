@@ -29,7 +29,7 @@ export default function AboutPage() {
             We’re Nepal&apos;s first dedicated vehicle branding agency, transforming public transport into powerful mobile billboards. From city buses to auto-rickshaws and even boats, we help your message go further and get seen by thousands every day.
           </p>
           <div className="mt-8 text-xl font-medium text-gray-700 border-l-4 border-red-600 pl-6 italic">
-            “We’re not just a media company — we’re creative enablers on wheels.”
+            “We’re not just a media company-we’re creative enablers on wheels.”
           </div>
         </div>
       </section>
@@ -41,7 +41,7 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl font-bold text-gray-800 mb-4">What Drives Us</h2>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Founded in Kathmandu, we started with a simple belief: advertising shouldn’t stand still. We blend creativity, local insight, and bold execution to make sure your brand stays in motion — and top of mind.
+                Founded in Kathmandu, we started with a simple belief: advertising shouldn’t stand still. We blend creativity, local insight, and bold execution to make sure your brand stays in motion - and top of mind.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-8 text-center">

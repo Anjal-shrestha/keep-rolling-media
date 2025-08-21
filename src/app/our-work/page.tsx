@@ -54,7 +54,7 @@ export default async function OurWorkPage() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800">Some of Our Projects</h2>
-            <p className="mt-2 text-lg text-gray-600">Bringing brands to the streets — and into the spotlight.</p>
+            <p className="mt-2 text-lg text-gray-600">Bringing brands to the streets - and into the spotlight.</p>
           </div>
           <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
             <table className="min-w-full divide-y divide-gray-200">

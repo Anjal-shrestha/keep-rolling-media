@@ -15,7 +15,7 @@ export default function WhyChooseUsSection() {
           {/* Left Column: Title and Quote */}
           <div className="text-center lg:text-left">
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-              We’re Not Just Another Ad Agency — We’re Your Mobile Branding Experts
+              We’re Not Just Another Ad Agency-We’re Your Mobile Branding Experts
             </h2>
             <blockquote className="mt-8 border-l-4 border-red-500 pl-6 italic text-xl text-gray-700">
               “Your brand won’t just be seen. It will be remembered.”

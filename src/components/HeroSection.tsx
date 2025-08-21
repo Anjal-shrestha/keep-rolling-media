@@ -37,7 +37,7 @@ export default function HeroSection() {
             className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-gray-600 leading-relaxed animate-fade-in-down"
             style={{ animationDelay: '0.3s' }}
           >
-            Make your brand move, stand out, and stay remembered — on wheels, on streets, and in minds.
+            Make your brand move, stand out, and stay remembered - on wheels, on streets, and in minds.
           </p>
 
           {/* CTA Button with Sticker Effect */}

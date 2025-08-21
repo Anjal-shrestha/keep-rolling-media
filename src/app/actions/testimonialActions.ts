@@ -12,11 +12,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// **THE FIX IS HERE:**
 interface FormState {
   message: string;
+  error?: string; // Error is now a valid, optional property
 }
+
 type CloudinaryUploadResult = UploadApiResponse | undefined;
 
+// --- CREATE TESTIMONIAL ---
 export async function createTestimonialAction(prevState: FormState, formData: FormData): Promise<FormState> {
   const name = formData.get('name') as string;
   const position = formData.get('position') as string;
@@ -24,7 +28,7 @@ export async function createTestimonialAction(prevState: FormState, formData: Fo
   const imageFile = formData.get('image') as File;
 
   if (!imageFile || imageFile.size === 0) {
-    return { message: 'An image is required.' };
+    return { message: '', error: 'An image is required.' };
   }
 
   const bytes = await imageFile.arrayBuffer();
@@ -37,7 +41,7 @@ export async function createTestimonialAction(prevState: FormState, formData: Fo
   });
 
   if (!uploadResult) {
-    return { message: 'Image upload failed.' };
+    return { message: '', error: 'Image upload failed.' };
   }
 
   await connectDB();
@@ -53,7 +57,7 @@ export async function createTestimonialAction(prevState: FormState, formData: Fo
     await new Testimonial(newTestimonial).save();
   } catch (error) {
     console.error('Failed to create testimonial:', error);
-    return { message: 'Failed to create testimonial.' };
+    return { message: '', error: 'Failed to create testimonial.' };
   }
 
   revalidatePath('/');
@@ -61,6 +65,7 @@ export async function createTestimonialAction(prevState: FormState, formData: Fo
   redirect('/admin/dashboard/testimonials');
 }
 
+// --- DELETE TESTIMONIAL ---
 export async function deleteTestimonialAction(testimonialId: string) {
   await connectDB();
   try {

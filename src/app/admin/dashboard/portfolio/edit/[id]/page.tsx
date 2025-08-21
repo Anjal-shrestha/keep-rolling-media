@@ -26,7 +26,7 @@ async function EditPortfolioLoader({ projectId }: { projectId: string }) {
   );
 }
 
-// Main page — This now correctly handles the props type for Next.js 15
+// Main page This now correctly handles the props type for Next.js 15
 export default async function EditPortfolioProjectPage({
   params,
 }: {

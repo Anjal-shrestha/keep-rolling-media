@@ -22,7 +22,7 @@ const SocialIcon = ({ children, href }: SocialIconProps) => (
 export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-200">
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-6 pt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center md:text-left">
 
           {/* Column 1: Logo and Company Info */}
@@ -95,14 +95,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar with Copyright and Credit */}
-        <div className="mt-12 pt-6 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
+        <div className="mt-12 py-4 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm mb-2 md:mb-0">
             © {new Date().getFullYear()} Keep Rolling Media Pvt. Ltd. All rights reserved.
           </p>
           <p className="text-gray-500 text-sm">
             Powered by{' '}
             <a 
-              href="https://geckoworks.com.np" 
+              href="https://geckoworksnepal.com" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="font-medium hover:text-red-600 transition-colors duration-300"

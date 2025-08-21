@@ -30,7 +30,7 @@ export default function ServicesSection() {
             Vehicle Branding Solutions Tailored to Nepal’s Streets
           </h2>
           <p className="mt-4 text-lg text-gray-600">
-            From concept to execution, we manage everything in-house — ensuring high-quality, consistent, and striking campaigns.
+            From concept to execution, we manage everything in-house-ensuring high-quality, consistent, and striking campaigns.
           </p>
         </div>
 
