@@ -1,20 +1,18 @@
 import connectDB from '@/lib/mongodb';
-import GalleryImage, { IGalleryImage } from '@/models/GalleryImage';
+import GalleryImage from '@/models/GalleryImage';
 import Image from 'next/image';
+
+interface PlainImageType {
+  _id: { toString(): string };
+  imageUrl: string;
+}
 
 export default async function GalleryPage() {
   await connectDB();
-  const images: IGalleryImage[] = await GalleryImage.find({}).sort({ createdAt: -1 });
-
-  // **THE FIX IS HERE:**
-  // Create a clean, properly-typed array of images first.
-  const plainImages = images.map(image => {
-    const plainObject = image.toObject();
-    return {
-      _id: plainObject._id.toString(),
-      imageUrl: plainObject.imageUrl,
-    };
-  });
+  // Fetch and prepare the images in a type-safe way
+  const images: PlainImageType[] = await GalleryImage.find({})
+    .sort({ createdAt: -1 })
+    .lean<PlainImageType[]>();
 
   return (
     <div className="bg-white">
@@ -28,21 +26,21 @@ export default async function GalleryPage() {
         </div>
       </section>
 
-      {/* Image Grid Section */}
+      {/* --- CORRECTED AND SIMPLIFIED IMAGE GRID --- */}
       <section className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {/* Now we map over our clean, pre-prepared array */}
-          {plainImages.map((image, index) => (
-            <div key={image._id} className="group relative h-80 rounded-lg overflow-hidden shadow-lg">
+          {images.map((image, index) => (
+            <div key={image._id.toString()} className="group relative aspect-square rounded-lg overflow-hidden shadow-lg">
               <Image
                 src={image.imageUrl}
                 alt={`Gallery image ${index + 1}`}
-                layout="fill"
-                objectFit="cover"
-                className="transform group-hover:scale-110 transition-transform duration-500"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw, 25vw"
+                className="object-cover transform group-hover:scale-110 transition-transform duration-500"
                 priority={index < 8}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              {/* This overlay is now fully transparent by default and only gets a color on hover */}
+              <div className="absolute inset-0 bg-transparent group-hover:bg-black/50 transition-colors duration-300"></div>
             </div>
           ))}
         </div>
