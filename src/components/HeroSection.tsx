@@ -30,7 +30,7 @@ export default function HeroSection() {
               Think Outside the Bus!
             </span>
             <span className="block bg-gradient-to-r from-red-600 to-gray-800 bg-clip-text text-transparent mt-3">
-              Nepal&apos;s  Premier Vehicle Branding Experts
+              Nepal&apos;s  Premium Vehicle Branding Experts
             </span>
           </h1>
 

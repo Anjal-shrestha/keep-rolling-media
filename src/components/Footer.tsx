@@ -78,11 +78,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center justify-center md:justify-start">
                 <span className="mr-3 text-lg">📞</span>
-                <span>01-4111974</span>
+                <span>9802342412</span>
               </li>
               <li className="flex items-center justify-center md:justify-start">
                 <span className="mr-3 text-lg">📧</span>
-                <span>marketing@keeprollmedia.com.np</span>
+                <span>marketing@keeprollingmedia.com.np</span>
               </li>
             </ul>
           </div>

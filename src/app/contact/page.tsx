@@ -52,11 +52,11 @@ export default function ContactPage() {
               </p>
               <p className="flex items-center">
                 <span className="mr-2 md:mr-3 text-lg md:text-xl">📞</span>
-                <span className="text-sm md:text-base">01-4111974</span>
+                <span className="text-sm md:text-base">9802342412</span>
               </p>
               <p className="flex items-center">
                 <span className="mr-2 md:mr-3 text-lg md:text-xl">📧</span>
-                <span className="text-sm md:text-base">marketing@keeprollmedia.com.np</span>
+                <span className="text-sm md:text-base">marketing@keeprollingmedia.com.np</span>
               </p>
             </div>
           </div>
