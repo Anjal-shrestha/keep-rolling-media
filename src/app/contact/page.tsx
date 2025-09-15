@@ -81,7 +81,7 @@ export default function ContactPage() {
                   name="name"
                   id="name"
                   required
-                  placeholder="John Doe"
+                  placeholder="Lorem Thapa"
                   className="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base placeholder-gray-400"
                 />
               </div>
@@ -98,7 +98,7 @@ export default function ContactPage() {
                   name="email"
                   id="email"
                   required
-                  placeholder="john@example.com"
+                  placeholder="ram@example.com"
                   className="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base placeholder-gray-400"
                 />
               </div>
