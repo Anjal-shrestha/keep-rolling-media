@@ -39,7 +39,7 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-              Nepal&apos;s Premier Vehicle Branding Experts. Taking brands to places since 2015.
+              Nepal&apos;s Premium Vehicle Branding Experts. Taking brands to places since 2015.
             </p>
             <div className="flex space-x-4 mt-6">
               {/* FIX: Added descriptive 'label' prop to each icon */}
